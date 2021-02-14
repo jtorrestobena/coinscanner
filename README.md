@@ -1,0 +1,2 @@
+# coinscanner
+Crypto currency scanner
