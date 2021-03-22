@@ -8,8 +8,8 @@ import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.service.coingecko.MarketItem
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 const val ITEMS_PER_PAGE = 50
 
