@@ -30,6 +30,9 @@ jobs:
         with:
           java-version: 11
 
+      - name: Gradle Wrapper
+        run: gradle wrapper
+
       - name: Run Unit Tests
         id: test
         uses: eskatos/gradle-command-action@v1.3.3
