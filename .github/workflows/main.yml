@@ -30,9 +30,6 @@ jobs:
         with:
           java-version: 11
 
-      - name: Publish Plugin
-        run: cd bindinglibplugin && gradle wrapper && sh gradlew publishPluginMavenPublicationToMavenLocal
-      
       - name: Run Unit Tests
         id: test
         uses: eskatos/gradle-command-action@v1.3.3
