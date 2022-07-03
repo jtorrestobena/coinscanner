@@ -32,7 +32,12 @@ jobs:
        - name: "checkout"
          uses: actions/checkout@v2
 
-       - name: "detekt"
-         uses: natiginfo/action-detekt-all@1.20.0
+       - name: Detekt
+         id: detekt
+         uses: gradle/gradle-build-action@v2
          with:
-          args: --fail-fast --config ci/detekt-config.yml
+           gradle-version: current
+           wrapper-cache-enabled: true
+           dependencies-cache-enabled: true
+           configuration-cache-enabled: true
+           arguments: detekt

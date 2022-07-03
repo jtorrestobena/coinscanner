@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeViewModel.kt:3</ID>
+    <ID>SwallowedException:EnumConverterFactory.kt$EnumConverterFactory$exception: Exception</ID>
+    <ID>TooGenericExceptionCaught:EnumConverterFactory.kt$EnumConverterFactory$exception: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>

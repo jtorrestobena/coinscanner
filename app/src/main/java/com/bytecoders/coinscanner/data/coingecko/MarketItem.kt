@@ -1,30 +1,58 @@
 package com.bytecoders.coinscanner.data.coingecko
 
+import com.google.gson.annotations.SerializedName
+
 data class MarketItem(
+    @SerializedName("ath")
     val ath: Double,
-    val ath_change_percentage: Double,
-    val ath_date: String,
+    @SerializedName("ath_change_percentage")
+    val athChangePercentage: Double,
+    @SerializedName("ath_date")
+    val athDate: String,
+    @SerializedName("atl")
     val atl: Double,
-    val atl_change_percentage: Double,
-    val atl_date: String,
-    val circulating_supply: Double,
-    val current_price: Double,
-    val fully_diluted_valuation: Double,
-    val high_24h: Double,
+    @SerializedName("atl_change_percentage")
+    val atlChangePercentage: Double,
+    @SerializedName("atl_date")
+    val atlDate: String,
+    @SerializedName("circulating_supply")
+    val circulatingSupply: Double,
+    @SerializedName("current_price")
+    val currentPrice: Double,
+    @SerializedName("fully_diluted_valuation")
+    val fullyDilutedValuation: Long,
+    @SerializedName("high_24h")
+    val high24h: Double,
+    @SerializedName("id")
     val id: String,
+    @SerializedName("image")
     val image: String,
-    val last_updated: String,
-    val low_24h: Double,
-    val market_cap: Double,
-    val market_cap_change_24h: Double,
-    val market_cap_change_percentage_24h: Double,
-    val market_cap_rank: Double,
-    val max_supply: Double,
+    @SerializedName("last_updated")
+    val lastUpdated: String,
+    @SerializedName("low_24h")
+    val low24h: Double,
+    @SerializedName("market_cap")
+    val marketCap: Long,
+    @SerializedName("market_cap_change_24h")
+    val marketCapChange24h: Double,
+    @SerializedName("market_cap_change_percentage_24h")
+    val marketCapChangePercentage24h: Double,
+    @SerializedName("market_cap_rank")
+    val marketCapRank: Int,
+    @SerializedName("max_supply")
+    val maxSupply: Double,
+    @SerializedName("name")
     val name: String,
-    val price_change_24h: Double,
-    val price_change_percentage_24h: Double,
+    @SerializedName("price_change_24h")
+    val priceChange24h: Double,
+    @SerializedName("price_change_percentage_24h")
+    val priceChangePercentage24h: Double,
+    @SerializedName("roi")
     val roi: Roi,
+    @SerializedName("symbol")
     val symbol: String,
-    val total_supply: Double,
-    val total_volume: Double
+    @SerializedName("total_supply")
+    val totalSupply: Double,
+    @SerializedName("total_volume")
+    val totalVolume: Double
 )

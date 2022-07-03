@@ -9,10 +9,10 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @InstallIn(ViewModelComponent::class)
 @Module
-abstract class RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    abstract fun bindCoinGeckoRepository(
+    fun bindCoinGeckoRepository(
         coinGeckoRepositoryImpl: CoinGeckoRepositoryImpl
     ): CoinGeckoRepository
 }
