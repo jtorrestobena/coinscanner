@@ -1,4 +1,4 @@
-package com.bytecoders.coinscanner.service.coingecko
+package com.bytecoders.coinscanner.data.coingecko
 
 data class MarketItem(
     val ath: Double,

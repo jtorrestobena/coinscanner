@@ -1,12 +1,11 @@
 package com.bytecoders.coinscanner.ui.home
 
 import androidx.lifecycle.*
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
-import com.bytecoders.coinscanner.service.coingecko.MarketItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

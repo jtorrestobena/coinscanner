@@ -1,5 +1,6 @@
 package com.bytecoders.coinscanner.service.coingecko
 
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
 import retrofit2.http.Query

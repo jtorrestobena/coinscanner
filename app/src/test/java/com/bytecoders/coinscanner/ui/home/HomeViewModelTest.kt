@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.bytecoders.coinscanner.data.DataUtil
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
-import com.bytecoders.coinscanner.service.coingecko.MarketItem
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.util.coroutineTest
 import com.bytecoders.coinscanner.util.getOrAwaitValue
 import io.mockk.every

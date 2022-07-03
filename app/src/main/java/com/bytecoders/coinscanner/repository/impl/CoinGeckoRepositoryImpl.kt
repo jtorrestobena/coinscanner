@@ -1,9 +1,9 @@
 package com.bytecoders.coinscanner.repository.impl
 
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
-import com.bytecoders.coinscanner.service.coingecko.MarketItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
