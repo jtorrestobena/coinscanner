@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-//marketcapdesc, geckodesc, geckoasc, marketcapasc,
+// marketcapdesc, geckodesc, geckoasc, marketcapasc,
 enum class GeckoOrder {
     @SerializedName("market_cap_desc")
     MARKET_CAP_DESC,
@@ -22,8 +22,10 @@ enum class GeckoOrder {
 
 interface CoinGeckoService {
     @GET("coins/markets")
-    suspend fun getMarkets(@Query("vs_currency") currency: String,
-                           @Query("page") page: Int,
-                           @Query("per_page") itemsPerPage: Int,
-                           @Query("order") order: GeckoOrder): List<MarketItem>
+    suspend fun getMarkets(
+        @Query("vs_currency") currency: String,
+        @Query("page") page: Int,
+        @Query("per_page") itemsPerPage: Int,
+        @Query("order") order: GeckoOrder
+    ): List<MarketItem>
 }

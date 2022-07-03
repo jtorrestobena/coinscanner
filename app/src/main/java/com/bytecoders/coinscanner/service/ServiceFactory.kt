@@ -17,19 +17,21 @@ object ServiceFactory {
     fun provideCoinGeckoService(): CoinGeckoService {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://coingecko.p.rapidapi.com/")
-            .client(OkHttpClient.Builder()
-                .addInterceptor {
-                    it.proceed(
-                        it.request().newBuilder()
-                            .addHeader(
-                                "x-rapidapi-key",
-                                "9dca701489msha60ad7038f0b5fap150af9jsnd6101dc279bf"
-                            )
-                            .addHeader("x-rapidapi-host", "coingecko.p.rapidapi.com")
-                            .build()
-                    )
-                }
-                .build())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor {
+                        it.proceed(
+                            it.request().newBuilder()
+                                .addHeader(
+                                    "x-rapidapi-key",
+                                    "9dca701489msha60ad7038f0b5fap150af9jsnd6101dc279bf"
+                                )
+                                .addHeader("x-rapidapi-host", "coingecko.p.rapidapi.com")
+                                .build()
+                        )
+                    }
+                    .build()
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(EnumConverterFactory())
             .build()
