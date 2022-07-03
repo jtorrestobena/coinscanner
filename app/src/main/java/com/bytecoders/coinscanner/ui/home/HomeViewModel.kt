@@ -17,6 +17,8 @@ class HomeViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val coinGeckoRepository: CoinGeckoRepository
 ) : ViewModel() {
+    val text: String = "This is HomeViewModel Fragment"
+
     private val _markets = MutableLiveData<List<MarketItem>>()
     val markets: LiveData<List<MarketItem>> get() = _markets
 
