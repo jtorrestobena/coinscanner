@@ -7,12 +7,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class ServiceFactoryTest : TestCase() {
-    lateinit var geckoService: CoinGeckoService
-
-    public override fun setUp() {
-        super.setUp()
-        geckoService = ServiceFactory().getCoinGeckoService()
-    }
+    private val geckoService: CoinGeckoService = ServiceFactory.provideCoinGeckoService()
 
     public override fun tearDown() {}
 
