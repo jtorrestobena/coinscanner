@@ -27,12 +27,11 @@ class HomeViewModel @Inject constructor(
             coinGeckoRepository.getMarkets(
                 page = page, itemsPerPage = ITEMS_PER_PAGE,
                 currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
-            )
-                .collect { marketItems ->
-                    _markets.value = marketItems
-                    page += 1
-                    savedStateHandle[CURRENT_PAGE_SAVED_STATE] = page
-                }
+            ).collect { marketItems ->
+                _markets.value = marketItems
+                page += 1
+                savedStateHandle[CURRENT_PAGE_SAVED_STATE] = page
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ jobs:
           wrapper-cache-enabled: true
           dependencies-cache-enabled: true
           configuration-cache-enabled: true
-          arguments: check
+          arguments: lint test
 
       ## Build all our Build Types at once ##
       - name: Build all artifacts
