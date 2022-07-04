@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Roi(
     @SerializedName("currency")
-    val currency: String,
+    val currency: String = "",
     @SerializedName("percentage")
-    val percentage: Double,
+    val percentage: Double = 0.0,
     @SerializedName("times")
-    val times: Double
+    val times: Double = 0.0
 )

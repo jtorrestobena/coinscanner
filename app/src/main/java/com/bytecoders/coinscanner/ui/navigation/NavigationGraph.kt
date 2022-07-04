@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.bytecoders.coinscanner.ui.dashboard.DashboardScreen
-import com.bytecoders.coinscanner.ui.dashboard.DashboardViewModel
 import com.bytecoders.coinscanner.ui.home.HomeScreen
 import com.bytecoders.coinscanner.ui.notifications.NotificationsScreen
 

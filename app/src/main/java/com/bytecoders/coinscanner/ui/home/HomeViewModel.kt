@@ -5,8 +5,7 @@ import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 const val ITEMS_PER_PAGE = 50
@@ -19,21 +18,14 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     val text: String = "This is HomeViewModel Fragment"
 
-    private val _markets = MutableLiveData<List<MarketItem>>()
-    val markets: LiveData<List<MarketItem>> get() = _markets
+    val markets: Flow<List<MarketItem>> get() = coinGeckoRepository.getMarkets(
+        page = page, itemsPerPage = ITEMS_PER_PAGE,
+        currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
+    )/*.collect { marketItems ->
+        _markets.value = marketItems
+        page += 1
+        savedStateHandle[CURRENT_PAGE_SAVED_STATE] = page
+    }*/
 
     private var page = savedStateHandle[CURRENT_PAGE_SAVED_STATE] ?: 1
-
-    fun load() {
-        viewModelScope.launch(Dispatchers.Main) {
-            coinGeckoRepository.getMarkets(
-                page = page, itemsPerPage = ITEMS_PER_PAGE,
-                currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
-            ).collect { marketItems ->
-                _markets.value = marketItems
-                page += 1
-                savedStateHandle[CURRENT_PAGE_SAVED_STATE] = page
-            }
-        }
-    }
 }
