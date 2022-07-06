@@ -3,14 +3,10 @@ package com.bytecoders.coinscanner.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -57,7 +53,6 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
 
 @Composable
 fun CoinItem(coin: MarketItem) {
-    // TODO Coil coin.image
     Row(modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)) {
@@ -69,13 +64,13 @@ fun CoinItem(coin: MarketItem) {
                 contentDescription = null,
                 modifier = Modifier
                         .height(50.dp)
-                        .width(50.dp)
-                        .clip(shape = CircleShape),
-                contentScale = ContentScale.Crop
+                        .width(50.dp),
+                contentScale = ContentScale.Fit
         )
         Text(
                 text = coin.name,
                 modifier = Modifier
+                        .padding(16.dp)
                         .fillMaxWidth()
         )
     }
