@@ -51,44 +51,61 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun CoinItemPreview() {
+    CoinItem(coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0))
+}
+
 @Composable
 fun CoinItem(coin: MarketItem) {
-    Row(modifier = Modifier
+    Row(
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)) {
+            .padding(16.dp)
+    ) {
         val image = rememberCoilPainter(
-                request = coin.image,
-                fadeIn = true)
-        Image(
-                painter = image,
-                contentDescription = null,
-                modifier = Modifier
-                        .height(50.dp)
-                        .width(50.dp),
-                contentScale = ContentScale.Fit
+            request = coin.image,
+            fadeIn = true
         )
-        Text(
+        Image(
+            painter = image,
+            contentDescription = null,
+            modifier = Modifier
+                .height(50.dp)
+                .width(50.dp),
+            contentScale = ContentScale.Fit
+        )
+        Column {
+            Text(
                 text = coin.name,
                 modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-        )
+                    .padding(start = 16.dp)
+                    .fillMaxWidth()
+            )
+            Text(
+                text = coin.currentPrice.toString(),
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 16.dp)
+                    .fillMaxWidth()
+            )
+        }
     }
 
 }
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun CoinListPreview() {
     CoinList(
-            coins = flowOf(
-                    PagingData.from(
-                            mutableListOf<MarketItem>().apply {
-                                repeat(50) {
-                                    add(MarketItem(name = "Top Coin $it"))
-                                }
-                            }
-                    )
+        coins = flowOf(
+            PagingData.from(
+                mutableListOf<MarketItem>().apply {
+                    repeat(50) {
+                        add(MarketItem(name = "Top Coin $it"))
+                    }
+                }
             )
+        )
     )
 }
