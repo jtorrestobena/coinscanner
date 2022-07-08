@@ -15,6 +15,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
+import com.bytecoders.coinscanner.ui.LoadingShimmerEffect
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -38,10 +39,16 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
         coinsItems.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
-                    //You can add modifier to manage load state when first time response page is loading
+                    repeat(50) {
+                        item {
+                            LoadingShimmerEffect()
+                        }
+                    }
                 }
                 loadState.append is LoadState.Loading -> {
-                    //You can add modifier to manage load state when next response page is loading
+                    item {
+                        LoadingShimmerEffect()
+                    }
                 }
                 loadState.append is LoadState.Error -> {
                     //You can use modifier to show error message
@@ -72,8 +79,7 @@ fun CoinItem(coin: MarketItem) {
             painter = image,
             contentDescription = null,
             modifier = Modifier
-                .height(50.dp)
-                .width(50.dp),
+                .size(50.dp),
             contentScale = ContentScale.Fit
         )
         Column {
