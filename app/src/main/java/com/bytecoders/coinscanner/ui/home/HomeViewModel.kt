@@ -1,6 +1,7 @@
 package com.bytecoders.coinscanner.ui.home
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
@@ -15,7 +16,7 @@ const val ITEMS_PER_PAGE = 50
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val coinGeckoRepository: CoinGeckoRepository
+    coinGeckoRepository: CoinGeckoRepository
 ) : ViewModel() {
     val markets: Flow<PagingData<MarketItem>> =
         coinGeckoRepository.getMarkets(
