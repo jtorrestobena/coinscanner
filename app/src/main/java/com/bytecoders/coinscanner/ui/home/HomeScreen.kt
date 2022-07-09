@@ -15,7 +15,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
-import com.bytecoders.coinscanner.ui.LoadingShimmerEffect
+import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.google.accompanist.coil.rememberCoilPainter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -51,7 +51,7 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
                     }
                 }
                 loadState.append is LoadState.Error -> {
-                    //You can use modifier to show error message
+                    // You can use modifier to show error message
                 }
             }
         }
@@ -97,10 +97,9 @@ fun CoinItem(coin: MarketItem) {
             )
         }
     }
-
 }
 
-//@Preview(showBackground = true)
+// @Preview(showBackground = true)
 @Composable
 fun CoinListPreview() {
     CoinList(

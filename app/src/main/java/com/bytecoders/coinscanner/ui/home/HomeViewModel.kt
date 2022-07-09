@@ -24,11 +24,7 @@ class HomeViewModel @Inject constructor(
             currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
         ).cachedIn(viewModelScope)
 
-    /*val markets: Flow<List<MarketItem>> get() = coinGeckoRepository.getMarkets(
-        page = page, itemsPerPage = ITEMS_PER_PAGE,
-        currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
-    )
-
+    /*
     .collect { marketItems ->
         _markets.value = marketItems
         page += 1

@@ -16,18 +16,18 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun DashboardScreen(viewModel: DashboardViewModel) {
     Column(
-            modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-                    .wrapContentSize(Alignment.Center)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .wrapContentSize(Alignment.Center)
     ) {
         Text(
-                text = viewModel.text,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                textAlign = TextAlign.Center,
-                fontSize = 20.sp
+            text = viewModel.text,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            textAlign = TextAlign.Center,
+            fontSize = 20.sp
         )
     }
 }

@@ -784,7 +784,7 @@ style:
     active: true
   WildcardImport:
     active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    excludes: ['**/test/**', '**/androidTest/**', '**/main/**', '**/*.Screen.kt']
     excludeImports:
       - 'java.util.*'
       - 'androidx.lifecycle.*'
