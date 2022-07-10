@@ -1,8 +1,10 @@
 package com.bytecoders.coinscanner.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,22 +17,24 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
+import com.bytecoders.coinscanner.ui.extensions.asCurrency
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlin.random.Random
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
     CoinList(
-        coins = viewModel.markets
+        coins = viewModel.markets,
+        currency = viewModel.uiState.currency
     )
 }
 
 @Composable
-fun CoinList(coins: Flow<PagingData<MarketItem>>) {
+fun CoinList(coins: Flow<PagingData<MarketItem>>, currency: String) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
     val swipeRefreshState = rememberSwipeRefreshState(false)
@@ -42,7 +46,7 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
             // Add a single item
             items(items = coinsItems) { coin ->
                 coin?.let {
-                    CoinItem(it)
+                    CoinItem(it, currency)
                 }
             }
 
@@ -65,7 +69,7 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
                         }
                     }
                     loadState.append is LoadState.Error -> {
-                        // You can use modifier to show error message
+                        // TODO show error message
                     }
                     loadState.refresh is LoadState.NotLoading -> {
                         swipeRefreshState.isRefreshing = false
@@ -79,11 +83,11 @@ fun CoinList(coins: Flow<PagingData<MarketItem>>) {
 @Preview(showBackground = true)
 @Composable
 fun CoinItemPreview() {
-    CoinItem(coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0))
+    CoinItem(coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0), "usd")
 }
 
 @Composable
-fun CoinItem(coin: MarketItem) {
+fun CoinItem(coin: MarketItem, currency: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,7 +112,7 @@ fun CoinItem(coin: MarketItem) {
                     .fillMaxWidth()
             )
             Text(
-                text = coin.currentPrice.toString(),
+                text = coin.currentPrice.asCurrency(currency),
                 modifier = Modifier
                     .padding(start = 16.dp, top = 16.dp)
                     .fillMaxWidth()
@@ -117,9 +121,10 @@ fun CoinItem(coin: MarketItem) {
     }
 }
 
-// @Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun CoinListPreview() {
+    /* https://issuetracker.google.com/issues/194544557?pli=1
     CoinList(
         coins = flowOf(
             PagingData.from(
@@ -130,5 +135,12 @@ fun CoinListPreview() {
                 }
             )
         )
-    )
+    )*/
+    LazyColumn {
+        repeat(50) {
+            item {
+                CoinItem(coin = MarketItem(name = "Top Coin $it", currentPrice = Random.nextDouble()), "usd")
+            }
+        }
+    }
 }

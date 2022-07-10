@@ -17,7 +17,8 @@ import javax.inject.Inject
 const val ITEMS_PER_PAGE = 50
 
 data class HomeUiState(
-    val marketOrdering: GeckoOrder = GeckoOrder.MARKET_CAP_DESC
+    val marketOrdering: GeckoOrder = GeckoOrder.MARKET_CAP_DESC,
+    val currency: String = "usd"
 )
 
 @HiltViewModel
@@ -31,10 +32,14 @@ class HomeViewModel @Inject constructor(
     val markets: Flow<PagingData<MarketItem>> =
         coinGeckoRepository.getMarkets(
             itemsPerPage = ITEMS_PER_PAGE,
-            currency = "usd", order = uiState.marketOrdering
+            currency = uiState.currency, order = uiState.marketOrdering
         ).cachedIn(viewModelScope)
 
     fun changeOrder(newOrdering: GeckoOrder) {
         uiState = uiState.copy(marketOrdering = newOrdering)
+    }
+
+    fun changeCurrency(newCurrency: String) {
+        uiState = uiState.copy(currency = newCurrency)
     }
 }
