@@ -17,41 +17,59 @@ import androidx.paging.compose.items
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel) {
-    CoinList(coins = viewModel.markets)
+    CoinList(
+        coins = viewModel.markets
+    )
 }
 
 @Composable
 fun CoinList(coins: Flow<PagingData<MarketItem>>) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
-    LazyColumn {
-        // Add a single item
-        items(items = coinsItems) { coin ->
-            coin?.let {
-                CoinItem(it)
-            }
-        }
 
-        coinsItems.apply {
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    repeat(50) {
+    val swipeRefreshState = rememberSwipeRefreshState(false)
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = { coinsItems.refresh() }
+    ) {
+        LazyColumn {
+            // Add a single item
+            items(items = coinsItems) { coin ->
+                coin?.let {
+                    CoinItem(it)
+                }
+            }
+
+            coinsItems.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        if (coinsItems.itemCount == 0) {
+                            repeat(50) {
+                                item {
+                                    LoadingShimmerEffect()
+                                }
+                            }
+                        } else {
+                            swipeRefreshState.isRefreshing = true
+                        }
+                    }
+                    loadState.append is LoadState.Loading -> {
                         item {
                             LoadingShimmerEffect()
                         }
                     }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item {
-                        LoadingShimmerEffect()
+                    loadState.append is LoadState.Error -> {
+                        // You can use modifier to show error message
                     }
-                }
-                loadState.append is LoadState.Error -> {
-                    // You can use modifier to show error message
+                    loadState.refresh is LoadState.NotLoading -> {
+                        swipeRefreshState.isRefreshing = false
+                    }
                 }
             }
         }
