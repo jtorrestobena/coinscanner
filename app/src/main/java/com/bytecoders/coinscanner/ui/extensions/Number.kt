@@ -10,3 +10,16 @@ fun Double.asCurrency(currency: String, numDecimal: Int = DEFAULT_NUM_DECIMAL): 
         maximumFractionDigits = numDecimal
         this.currency = Currency.getInstance(currency.uppercase(Locale.ROOT))
     }.format(this)
+
+fun Double.asPercentageChange(): String {
+    val heading = if (this > 0.0F) {
+        "↗ "
+    } else if (this < 0.0F) {
+        "↘ "
+    } else {
+        ""
+    }
+    val amount = "%.2f".format(this)
+
+    return "$heading$amount%"
+}

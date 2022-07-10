@@ -60,3 +60,14 @@ val md_theme_dark_shadow = Color(0xFF000000)
 
 val seed = Color(0xFF3465a4)
 val error = Color(0xFFba1b1b)
+
+val PriceDown = Color(0xFFe15241)
+val PriceUp = Color(0xFF4eaf0a)
+
+fun Double.priceChangeColor(): Color = if (this > 0.0F) {
+    PriceUp
+} else if (this < 0.0F) {
+    PriceDown
+} else {
+    Color.Black
+}

@@ -3,12 +3,15 @@ package com.bytecoders.coinscanner.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -16,7 +19,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
+import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
+import com.bytecoders.coinscanner.ui.theme.priceChangeColor
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -86,11 +91,12 @@ fun CoinItemPreview() {
 
 @Composable
 fun CoinItem(coin: MarketItem, currency: String) {
-    Row(
+    ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
+        val (coinImage, coinName, coinPrice, coinChange) = createRefs()
         val image = rememberCoilPainter(
             request = coin.image,
             fadeIn = true
@@ -99,23 +105,46 @@ fun CoinItem(coin: MarketItem, currency: String) {
             painter = image,
             contentDescription = null,
             modifier = Modifier
-                .size(50.dp),
+                .size(50.dp)
+                .constrainAs(coinImage) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                },
             contentScale = ContentScale.Fit
         )
-        Column {
-            Text(
-                text = coin.name,
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .fillMaxWidth()
-            )
-            Text(
-                text = coin.currentPrice.asCurrency(currency),
-                modifier = Modifier
-                    .padding(start = 16.dp, top = 16.dp)
-                    .fillMaxWidth()
-            )
-        }
+        Text(
+            text = coin.name,
+            modifier = Modifier
+                .constrainAs(coinName) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    start.linkTo(coinImage.end, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+        )
+        Text(
+            text = coin.currentPrice.asCurrency(currency),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .constrainAs(coinPrice) {
+                    top.linkTo(coinName.bottom, margin = 8.dp)
+                    start.linkTo(coinImage.end, margin = 16.dp)
+                    end.linkTo(coinChange.start, margin = 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+        )
+
+        Text(
+            text = coin.priceChangePercentage24h.asPercentageChange(),
+            color = coin.priceChangePercentage24h.priceChangeColor(),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier
+                .constrainAs(coinChange) {
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+        )
     }
 }
 
@@ -137,7 +166,14 @@ fun CoinListPreview() {
     LazyColumn {
         repeat(50) {
             item {
-                CoinItem(coin = MarketItem(name = "Top Coin $it", currentPrice = Random.nextDouble()), "usd")
+                CoinItem(
+                    coin = MarketItem(
+                        name = "Top Coin $it",
+                        currentPrice = Random.nextDouble(),
+                        priceChangePercentage24h = Random.nextDouble(-100.0, 100.0)
+                    ),
+                    "usd"
+                )
             }
         }
     }
