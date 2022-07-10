@@ -6,10 +6,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
@@ -20,9 +18,7 @@ fun BottomNavigationView(navController: NavController) {
         NavigationItem.Dashboard,
         NavigationItem.Notifications
     )
-    NavigationBar(
-        contentColor = Color.Black
-    ) {
+    NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
@@ -35,8 +31,7 @@ fun BottomNavigationView(navController: NavController) {
                 },
                 label = {
                     Text(
-                        text = stringResource(item.title),
-                        fontSize = 9.sp
+                        text = stringResource(item.title)
                     )
                 },
                 alwaysShowLabel = true,

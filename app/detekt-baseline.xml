@@ -5,12 +5,12 @@
     <ID>FunctionNaming:AppTheme.kt$@Composable fun AppTheme( isDarkTheme: Boolean = isSystemInDarkTheme(), isDynamicColor: Boolean = true, content: @Composable () -> Unit )</ID>
     <ID>FunctionNaming:BottomNavigation.kt$@Composable fun BottomNavigationView(navController: NavController)</ID>
     <ID>FunctionNaming:DashboardScreen.kt$@Composable fun DashboardScreen(viewModel: DashboardViewModel)</ID>
-    <ID>FunctionNaming:HomeScreen.kt$// @Preview(showBackground = true) @Composable fun CoinListPreview()</ID>
-    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CoinItem(coin: MarketItem)</ID>
-    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CoinList(coins: Flow&lt;PagingData&lt;MarketItem>>)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CoinItem(coin: MarketItem, currency: String)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Composable fun CoinList(coins: Flow&lt;PagingData&lt;MarketItem>>, currency: String)</ID>
     <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen(viewModel: HomeViewModel)</ID>
     <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun CoinItemPreview()</ID>
-    <ID>FunctionNaming:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen()</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun CoinListPreview()</ID>
+    <ID>FunctionNaming:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable @Preview fun MainScreen()</ID>
     <ID>FunctionNaming:NavigationGraph.kt$@Composable fun NavigationGraph(navController: NavHostController, bottomPadding: Dp)</ID>
     <ID>FunctionNaming:NotificationsScreen.kt$@Composable fun NotificationsScreen(viewModel: NotificationsViewModel)</ID>
     <ID>FunctionNaming:Shimmer.kt$@Composable @Preview(showBackground = true) fun ShimmerPreview()</ID>
@@ -59,6 +59,7 @@
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:4</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.placeholder.Shimmer.kt:3</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.placeholder.Shimmer.kt:5</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.theme.AppTheme.kt:5</ID>
     <ID>SwallowedException:EnumConverterFactory.kt$EnumConverterFactory$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:EnumConverterFactory.kt$EnumConverterFactory$exception: Exception</ID>
   </CurrentIssues>
