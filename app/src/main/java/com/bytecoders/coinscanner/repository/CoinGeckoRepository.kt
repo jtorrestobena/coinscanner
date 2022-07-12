@@ -12,4 +12,6 @@ interface CoinGeckoRepository {
         itemsPerPage: Int,
         order: GeckoOrder
     ): Flow<PagingData<MarketItem>>
+
+    fun refreshMarkets()
 }

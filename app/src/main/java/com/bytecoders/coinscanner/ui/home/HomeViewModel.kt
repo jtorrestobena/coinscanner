@@ -12,18 +12,20 @@ import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 const val ITEMS_PER_PAGE = 50
 
 data class HomeUiState(
     val marketOrdering: GeckoOrder = GeckoOrder.MARKET_CAP_DESC,
-    val currency: String = "usd"
+    val currency: String = "usd",
+    val isRefreshing: Boolean = false
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    coinGeckoRepository: CoinGeckoRepository
+    private val coinGeckoRepository: CoinGeckoRepository
 ) : ViewModel() {
 
     var uiState by mutableStateOf(HomeUiState())
@@ -34,6 +36,11 @@ class HomeViewModel @Inject constructor(
             itemsPerPage = ITEMS_PER_PAGE,
             currency = uiState.currency, order = uiState.marketOrdering
         ).cachedIn(viewModelScope)
+
+    fun refreshMarkets() {
+        uiState = uiState.copy(isRefreshing = true)
+        coinGeckoRepository.refreshMarkets()
+    }
 
     fun changeOrder(newOrdering: GeckoOrder) {
         uiState = uiState.copy(marketOrdering = newOrdering)

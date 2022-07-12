@@ -11,6 +11,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Devices
@@ -37,19 +38,27 @@ import kotlin.random.Random
 fun HomeScreen(viewModel: HomeViewModel) {
     CoinList(
         coins = viewModel.markets,
-        currency = viewModel.uiState.currency
+        currency = viewModel.uiState.currency,
+        isRefreshing = viewModel.uiState.isRefreshing,
+        onRefresh = { viewModel.refreshMarkets() }
     )
 }
 
 private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
+
 @Composable
-fun CoinList(coins: Flow<PagingData<MarketItem>>, currency: String) {
+fun CoinList(
+    coins: Flow<PagingData<MarketItem>>,
+    currency: String,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit
+) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
-    val swipeRefreshState = rememberSwipeRefreshState(false)
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
     SwipeRefresh(
         state = swipeRefreshState,
-        onRefresh = { coinsItems.refresh() }
+        onRefresh = onRefresh
     ) {
         LazyVerticalGrid(columns = coinColumns) {
             // Add a single item

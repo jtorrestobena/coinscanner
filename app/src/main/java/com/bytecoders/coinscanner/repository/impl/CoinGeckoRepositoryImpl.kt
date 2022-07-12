@@ -16,13 +16,20 @@ import javax.inject.Inject
 class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: CoinGeckoService) :
     CoinGeckoRepository {
 
+    private var marketsSource: MarketsSource = MarketsSource(geckoService)
+
     override fun getMarkets(
         currency: String,
         itemsPerPage: Int,
         order: GeckoOrder
     ): Flow<PagingData<MarketItem>> {
         return Pager(PagingConfig(pageSize = ITEMS_PER_PAGE)) {
-            MarketsSource(geckoService)
+            marketsSource = MarketsSource(geckoService)
+            marketsSource
         }.flow
+    }
+
+    override fun refreshMarkets() {
+        marketsSource.invalidate()
     }
 }
