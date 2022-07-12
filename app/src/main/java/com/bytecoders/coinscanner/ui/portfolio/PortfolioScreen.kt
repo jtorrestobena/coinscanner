@@ -1,4 +1,4 @@
-package com.bytecoders.coinscanner.ui.notifications
+package com.bytecoders.coinscanner.ui.portfolio
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun NotificationsScreen(viewModel: NotificationsViewModel) {
+fun PortfolioScreen(viewModel: PortfolioViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

@@ -1,4 +1,4 @@
-package com.bytecoders.coinscanner.ui.dashboard
+package com.bytecoders.coinscanner.ui.more
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -14,7 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel) {
+fun MoreScreen(viewModel: MoreViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()

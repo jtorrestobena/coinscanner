@@ -16,7 +16,7 @@ import javax.inject.Inject
 class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: CoinGeckoService) :
     CoinGeckoRepository {
 
-    private var marketsSource: MarketsSource = MarketsSource(geckoService)
+    private var marketsSource: MarketsSource? = null
 
     override fun getMarkets(
         currency: String,
@@ -24,12 +24,13 @@ class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: Coin
         order: GeckoOrder
     ): Flow<PagingData<MarketItem>> {
         return Pager(PagingConfig(pageSize = ITEMS_PER_PAGE)) {
-            marketsSource = MarketsSource(geckoService)
-            marketsSource
+            MarketsSource(geckoService).apply {
+                marketsSource = this
+            }
         }.flow
     }
 
     override fun refreshMarkets() {
-        marketsSource.invalidate()
+        marketsSource?.invalidate()
     }
 }

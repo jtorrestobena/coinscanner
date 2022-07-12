@@ -9,13 +9,13 @@ sealed class NavigationItem(
     @StringRes val title: Int,
     @DrawableRes val icon: Int
 ) {
-    object Home : NavigationItem("home", R.string.title_home, R.drawable.ic_home_black_24dp)
+    object Home : NavigationItem("home", R.string.title_home, R.drawable.ic_home)
     object Dashboard :
-        NavigationItem("dashboard", R.string.title_dashboard, R.drawable.ic_dashboard_black_24dp)
+        NavigationItem("portfolio", R.string.title_portfolio, R.drawable.ic_portfolio)
 
     object Notifications : NavigationItem(
-        "notifications",
-        R.string.title_notifications,
-        R.drawable.ic_notifications_black_24dp
+        "more",
+        R.string.title_more,
+        R.drawable.ic_more
     )
 }
