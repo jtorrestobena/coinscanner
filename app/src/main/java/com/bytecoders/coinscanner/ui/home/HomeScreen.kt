@@ -1,19 +1,28 @@
 package com.bytecoders.coinscanner.ui.home
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.Chip
+import androidx.compose.material.ChipDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +33,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
+import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
 import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
@@ -40,7 +50,8 @@ fun HomeScreen(viewModel: HomeViewModel) {
         coins = viewModel.markets,
         currency = viewModel.uiState.currency,
         isRefreshing = viewModel.uiState.isRefreshing,
-        onRefresh = { viewModel.refreshMarkets() }
+        onRefresh = { viewModel.refreshMarkets() },
+        onSortChanged = { viewModel.changeOrder(it) }
     )
 }
 
@@ -51,7 +62,8 @@ fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
     currency: String,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onSortChanged: (GeckoOrder) -> Unit
 ) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
@@ -61,7 +73,15 @@ fun CoinList(
         onRefresh = onRefresh
     ) {
         LazyVerticalGrid(columns = coinColumns) {
-            // Add a single item
+            item {
+                LazyRow {
+                    item {
+                        SortMenu(onSortChanged)
+                    }
+                }
+            }
+
+            // List of coins
             items(count = coinsItems.itemCount) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
@@ -199,6 +219,50 @@ fun CoinListPreview() {
                         priceChangePercentage24h = Random.nextDouble(-100.0, 100.0)
                     ),
                     "usd"
+                )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun SortMenu(onSortChanged: (GeckoOrder) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column {
+        Chip(
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            onClick = { expanded = true },
+            border = BorderStroke(
+                ChipDefaults.OutlinedBorderSize,
+                Color.Red
+            ),
+            colors = ChipDefaults.chipColors(
+                backgroundColor = Color.White,
+                contentColor = Color.Red
+            ),
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Settings,
+                    contentDescription = "Localized description"
+                )
+            }
+        ) {
+            Text("Change settings")
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            GeckoOrder.values().forEach { geckoOrder ->
+                DropdownMenuItem(
+                    text = { Text(stringResource(id = geckoOrder.description)) },
+                    onClick = {
+                        onSortChanged(geckoOrder)
+                        expanded = false
+                    },
                 )
             }
         }

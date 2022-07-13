@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
+import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
@@ -17,20 +18,25 @@ class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: Coin
     CoinGeckoRepository {
 
     private var marketsSource: MarketsSource? = null
+    private var coinMarketConfiguration = CoinMarketConfiguration()
 
-    override fun getMarkets(
-        currency: String,
-        itemsPerPage: Int,
-        order: GeckoOrder
-    ): Flow<PagingData<MarketItem>> {
+    override fun getMarkets(configuration: CoinMarketConfiguration): Flow<PagingData<MarketItem>> {
+        coinMarketConfiguration = configuration
         return Pager(PagingConfig(pageSize = ITEMS_PER_PAGE)) {
-            MarketsSource(geckoService).apply {
+            MarketsSource(
+                geckoService,
+                coinMarketConfiguration.currency,
+                coinMarketConfiguration.order
+            ).apply {
                 marketsSource = this
             }
         }.flow
     }
 
-    override fun refreshMarkets() {
+    override fun refreshMarkets(newConfiguration: CoinMarketConfiguration?) {
+        newConfiguration?.let {
+            coinMarketConfiguration = it
+        }
         marketsSource?.invalidate()
     }
 }

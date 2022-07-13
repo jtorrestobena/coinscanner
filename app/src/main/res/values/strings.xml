@@ -3,4 +3,10 @@
     <string name="title_home">Markets</string>
     <string name="title_portfolio">Portfolio</string>
     <string name="title_more">More</string>
+    <string name="market_cap_asc">Highest Market Cap</string>
+    <string name="market_cap_desc">Lowest Market Cap</string>
+    <string name="market_gecko_asc">Gecko Highest</string>
+    <string name="market_gecko_desc">Gecko Lowest</string>
+    <string name="market_volume_asc">Highest Volume</string>
+    <string name="market_volume_desc">Lowest Volume</string>
 </resources>

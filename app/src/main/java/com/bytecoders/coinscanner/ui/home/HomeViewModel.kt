@@ -9,10 +9,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
+import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 const val ITEMS_PER_PAGE = 50
@@ -31,22 +31,28 @@ class HomeViewModel @Inject constructor(
     var uiState by mutableStateOf(HomeUiState())
         private set
 
-    val markets: Flow<PagingData<MarketItem>> =
-        coinGeckoRepository.getMarkets(
+    private val marketConfiguration: CoinMarketConfiguration
+        get() = CoinMarketConfiguration(
             itemsPerPage = ITEMS_PER_PAGE,
-            currency = uiState.currency, order = uiState.marketOrdering
-        ).cachedIn(viewModelScope)
+            currency = uiState.currency,
+            order = uiState.marketOrdering
+        )
+
+    val markets: Flow<PagingData<MarketItem>> =
+        coinGeckoRepository.getMarkets(marketConfiguration).cachedIn(viewModelScope)
 
     fun refreshMarkets() {
         uiState = uiState.copy(isRefreshing = true)
-        coinGeckoRepository.refreshMarkets()
+        coinGeckoRepository.refreshMarkets(null)
     }
 
     fun changeOrder(newOrdering: GeckoOrder) {
         uiState = uiState.copy(marketOrdering = newOrdering)
+        coinGeckoRepository.refreshMarkets(marketConfiguration)
     }
 
     fun changeCurrency(newCurrency: String) {
         uiState = uiState.copy(currency = newCurrency)
+        coinGeckoRepository.refreshMarkets(marketConfiguration)
     }
 }

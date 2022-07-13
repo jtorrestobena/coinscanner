@@ -7,7 +7,11 @@ import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import retrofit2.HttpException
 import java.io.IOException
 
-class MarketsSource(private val geckoService: CoinGeckoService) : PagingSource<Int, MarketItem>() {
+class MarketsSource(
+    private val geckoService: CoinGeckoService,
+    private val currency: String,
+    private val order: GeckoOrder
+) : PagingSource<Int, MarketItem>() {
 
     override val keyReuseSupported: Boolean = true
 
@@ -22,7 +26,7 @@ class MarketsSource(private val geckoService: CoinGeckoService) : PagingSource<I
             val pageNumber = params.key ?: 0
             val markets = geckoService.getMarkets(
                 page = pageNumber, itemsPerPage = params.loadSize,
-                currency = "usd", order = GeckoOrder.MARKET_CAP_DESC
+                currency = currency, order = order
             )
             LoadResult.Page(
                 data = markets,

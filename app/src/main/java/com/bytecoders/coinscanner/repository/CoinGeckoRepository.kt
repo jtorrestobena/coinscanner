@@ -8,10 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface CoinGeckoRepository {
 
     fun getMarkets(
-        currency: String,
-        itemsPerPage: Int,
-        order: GeckoOrder
+        configuration: CoinMarketConfiguration
     ): Flow<PagingData<MarketItem>>
 
-    fun refreshMarkets()
+    fun refreshMarkets(newConfiguration: CoinMarketConfiguration?)
 }
