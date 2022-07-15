@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -32,6 +34,7 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
@@ -42,6 +45,7 @@ import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 import kotlin.random.Random
 
 @Composable
@@ -51,19 +55,22 @@ fun HomeScreen(viewModel: HomeViewModel) {
         currency = viewModel.uiState.currency,
         isRefreshing = viewModel.uiState.isRefreshing,
         onRefresh = { viewModel.refreshMarkets() },
-        onSortChanged = { viewModel.changeOrder(it) }
+        onSortChanged = { viewModel.changeOrder(it) },
+        selectedOrder = viewModel.uiState.marketOrdering
     )
 }
 
 private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
-    currency: String,
+    currency: Currency,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
-    onSortChanged: (GeckoOrder) -> Unit
+    onSortChanged: (GeckoOrder) -> Unit,
+    selectedOrder: GeckoOrder
 ) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
@@ -76,7 +83,30 @@ fun CoinList(
             item {
                 LazyRow {
                     item {
-                        SortMenu(onSortChanged)
+                        SortMenu(selectedOrder = selectedOrder, onSortChanged = onSortChanged)
+                    }
+                    item {
+                        Chip(
+                            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+                            onClick = { },
+                            border = BorderStroke(
+                                ChipDefaults.OutlinedBorderSize,
+                                MaterialTheme.colorScheme.primary
+                            ),
+                            colors = ChipDefaults.chipColors(
+                                backgroundColor = Color.Transparent,
+                                contentColor = MaterialTheme.colorScheme.primary
+                            ),
+                            leadingIcon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_expand_more),
+                                    contentDescription = stringResource(id = selectedOrder.description)
+                                )
+                            }
+                        ) {
+                            Text(currency.displayName)
+                        }
+
                     }
                 }
             }
@@ -85,7 +115,7 @@ fun CoinList(
             items(count = coinsItems.itemCount) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency)
+                    CoinItem(it, currency.symbol)
                 }
             }
 
@@ -179,7 +209,8 @@ fun CoinItem(coin: MarketItem, currency: String) {
 
             Text(
                 text = coin.priceChangePercentage24h.asPercentageChange(),
-                color = coin.priceChangePercentage24h.priceChangeColor(),
+                color = coin.priceChangePercentage24h.priceChangeColor()
+                    ?: MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .constrainAs(coinChange) {
@@ -227,29 +258,29 @@ fun CoinListPreview() {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun SortMenu(onSortChanged: (GeckoOrder) -> Unit) {
+fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column {
+    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
         Chip(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
             onClick = { expanded = true },
             border = BorderStroke(
                 ChipDefaults.OutlinedBorderSize,
-                Color.Red
+                MaterialTheme.colorScheme.primary
             ),
             colors = ChipDefaults.chipColors(
-                backgroundColor = Color.White,
-                contentColor = Color.Red
+                backgroundColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.primary
             ),
             leadingIcon = {
                 Icon(
-                    Icons.Filled.Settings,
-                    contentDescription = "Localized description"
+                    painter = painterResource(id = R.drawable.ic_expand_more),
+                    contentDescription = stringResource(id = selectedOrder.description)
                 )
             }
         ) {
-            Text("Change settings")
+            Text(stringResource(id = selectedOrder.description))
         }
 
         DropdownMenu(

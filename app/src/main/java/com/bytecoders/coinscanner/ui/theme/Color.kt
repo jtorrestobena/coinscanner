@@ -1,5 +1,6 @@
 package com.bytecoders.coinscanner.ui.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF205fa6)
@@ -64,10 +65,10 @@ val error = Color(0xFFba1b1b)
 val PriceDown = Color(0xFFe15241)
 val PriceUp = Color(0xFF4eaf0a)
 
-fun Double.priceChangeColor(): Color = if (this > 0.0F) {
+fun Double.priceChangeColor(): Color? = if (this > 0.0F) {
     PriceUp
 } else if (this < 0.0F) {
     PriceDown
 } else {
-    Color.Black
+    null
 }

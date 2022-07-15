@@ -20,7 +20,7 @@ data class MarketItem(
     @SerializedName("current_price")
     val currentPrice: Double = 0.0,
     @SerializedName("fully_diluted_valuation")
-    val fullyDilutedValuation: Long = 0,
+    val fullyDilutedValuation: Double = 0.0,
     @SerializedName("high_24h")
     val high24h: Double = 0.0,
     @SerializedName("id")
@@ -32,7 +32,7 @@ data class MarketItem(
     @SerializedName("low_24h")
     val low24h: Double = 0.0,
     @SerializedName("market_cap")
-    val marketCap: Long = 0,
+    val marketCap: Double = 0.0,
     @SerializedName("market_cap_change_24h")
     val marketCapChange24h: Double = 0.0,
     @SerializedName("market_cap_change_percentage_24h")
