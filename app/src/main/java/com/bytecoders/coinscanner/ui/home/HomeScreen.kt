@@ -10,26 +10,19 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -39,6 +32,7 @@ import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
 import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
+import com.bytecoders.coinscanner.ui.navigation.RouteCurrencySelection
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.bytecoders.coinscanner.ui.theme.priceChangeColor
 import com.google.accompanist.coil.rememberCoilPainter
@@ -49,14 +43,19 @@ import java.util.*
 import kotlin.random.Random
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel) {
+fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
     CoinList(
         coins = viewModel.markets,
         currency = viewModel.uiState.currency,
         isRefreshing = viewModel.uiState.isRefreshing,
         onRefresh = { viewModel.refreshMarkets() },
         onSortChanged = { viewModel.changeOrder(it) },
-        selectedOrder = viewModel.uiState.marketOrdering
+        selectedOrder = viewModel.uiState.marketOrdering,
+        onCurrencyClicked = {
+            navController.navigate(RouteCurrencySelection) {
+                launchSingleTop = true
+            }
+        }
     )
 }
 
@@ -70,7 +69,8 @@ fun CoinList(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     onSortChanged: (GeckoOrder) -> Unit,
-    selectedOrder: GeckoOrder
+    selectedOrder: GeckoOrder,
+    onCurrencyClicked: () -> Unit,
 ) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
@@ -88,7 +88,7 @@ fun CoinList(
                     item {
                         Chip(
                             shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
-                            onClick = { },
+                            onClick = onCurrencyClicked,
                             border = BorderStroke(
                                 ChipDefaults.OutlinedBorderSize,
                                 MaterialTheme.colorScheme.primary
@@ -106,7 +106,6 @@ fun CoinList(
                         ) {
                             Text(currency.displayName)
                         }
-
                     }
                 }
             }
@@ -115,7 +114,7 @@ fun CoinList(
             items(count = coinsItems.itemCount) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency.symbol)
+                    CoinItem(it, currency.currencyCode.lowercase())
                 }
             }
 

@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
     private val marketConfiguration: CoinMarketConfiguration
         get() = CoinMarketConfiguration(
             itemsPerPage = ITEMS_PER_PAGE,
-            currency = uiState.currency.currencyCode,
+            currency = uiState.currency.currencyCode.lowercase(),
             order = uiState.marketOrdering
         )
 

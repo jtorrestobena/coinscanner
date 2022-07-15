@@ -8,7 +8,6 @@ import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
-import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
