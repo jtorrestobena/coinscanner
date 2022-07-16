@@ -4,10 +4,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
@@ -43,6 +42,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlin.random.Random
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.paging.compose.items
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
@@ -83,11 +85,12 @@ fun CoinList(
         state = swipeRefreshState,
         onRefresh = onRefresh
     ) {
-        LazyVerticalGrid(
-            columns = coinColumns,
+        LazyColumn(
+            //columns = coinColumns,
             contentPadding = coinContentPadding,
             verticalArrangement = coinVerticalArrangement,
-            state = rememberLazyGridState()
+            //state = rememberLazyGridState()
+            state = rememberLazyListState()
         ) {
             item {
                 LazyRow {
@@ -121,7 +124,7 @@ fun CoinList(
 
             // List of coins
             items(count = coinsItems.itemCount, key = {
-                coinsItems[it]?.id.orEmpty()
+                it //coinsItems[it]?.id.orEmpty()
             }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
@@ -163,7 +166,7 @@ fun CoinList(
 @Composable
 fun CoinItemPreview() {
     CoinItem(
-        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0),
+        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0, marketCap = 123123100.0),
         "usd",
         Modifier
     )
@@ -173,7 +176,7 @@ fun CoinItemPreview() {
 @Composable
 fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         ConstraintLayout(
@@ -181,7 +184,7 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            val (coinImage, coinName, coinPrice, coinChange) = createRefs()
+            val (coinImage, coinName, coinPrice, coinMarketCap, coinTicker, coinChange) = createRefs()
             val image = rememberCoilPainter(
                 request = coin.image,
                 fadeIn = true
@@ -203,30 +206,54 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                 modifier = Modifier
                     .constrainAs(coinName) {
                         top.linkTo(parent.top)
-                        end.linkTo(parent.end)
+                        end.linkTo(coinTicker.start)
                         start.linkTo(coinImage.end, margin = 16.dp)
                         width = Dimension.fillToConstraints
                     }
             )
             Text(
-                text = coin.currentPrice.asCurrency(currency),
+                text = stringResource(R.string.coin_price, coin.currentPrice.asCurrency(currency)),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .constrainAs(coinPrice) {
-                        top.linkTo(coinName.bottom, margin = 8.dp)
+                        top.linkTo(coinName.bottom)
                         start.linkTo(coinImage.end, margin = 16.dp)
-                        end.linkTo(coinChange.start, margin = 16.dp)
+                        end.linkTo(coinTicker.start, margin = 16.dp)
                         width = Dimension.fillToConstraints
                     }
+            )
+
+            Text(
+                text = stringResource(R.string.coin_market_cap, coin.marketCap.asCurrency(currency)),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .constrainAs(coinMarketCap) {
+                        top.linkTo(coinPrice.bottom)
+                        start.linkTo(coinImage.end, margin = 16.dp)
+                        end.linkTo(coinTicker.start, margin = 16.dp)
+                        width = Dimension.fillToConstraints
+                    }
+            )
+
+            Text(
+                text = "BTC",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier
+                    .constrainAs(coinTicker) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(start = 8.dp)
             )
 
             Text(
                 text = coin.priceChangePercentage24h.asPercentageChange(),
                 color = coin.priceChangePercentage24h.priceChangeColor()
                     ?: MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineSmall,
+                style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .constrainAs(coinChange) {
+                        top.linkTo(coinTicker.bottom)
                         end.linkTo(parent.end)
                         bottom.linkTo(parent.bottom)
                     }
