@@ -184,7 +184,7 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            val (coinImage, coinName, coinPrice, coinMarketCap, coinTicker, coinChange) = createRefs()
+            val (coinImage, coinName, coinPrice, coinTicker, coinChange) = createRefs()
             val image = rememberCoilPainter(
                 request = coin.image,
                 fadeIn = true
@@ -212,23 +212,11 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                     }
             )
             Text(
-                text = stringResource(R.string.coin_price, coin.currentPrice.asCurrency(currency)),
+                text = coin.currentPrice.asCurrency(currency),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .constrainAs(coinPrice) {
                         top.linkTo(coinName.bottom)
-                        start.linkTo(coinImage.end, margin = 16.dp)
-                        end.linkTo(coinTicker.start, margin = 16.dp)
-                        width = Dimension.fillToConstraints
-                    }
-            )
-
-            Text(
-                text = stringResource(R.string.coin_market_cap, coin.marketCap.asCurrency(currency)),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .constrainAs(coinMarketCap) {
-                        top.linkTo(coinPrice.bottom)
                         start.linkTo(coinImage.end, margin = 16.dp)
                         end.linkTo(coinTicker.start, margin = 16.dp)
                         width = Dimension.fillToConstraints
