@@ -1,21 +1,30 @@
 package com.bytecoders.coinscanner.service
 
+import com.bytecoders.coinscanner.data.coingecko.INITIAL_PAGE
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
+import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
-class ServiceFactoryTest : TestCase() {
+private const val TEST_NUM_PAGES = 10
+class ServiceFactoryTest {
     private val geckoService: CoinGeckoService = ServiceFactory.provideCoinGeckoService()
 
-    public override fun tearDown() {}
-
     @Test
-    fun testGeckoService() {
+    fun `test pagination on gecko service has unique coin ids`() {
+        val markets = mutableListOf<MarketItem>()
         runBlocking {
-            val markets = geckoService.getMarkets("usd", 1, 10, GeckoOrder.MARKET_CAP_DESC)
-            assertNotNull(markets)
+            for (i in INITIAL_PAGE..TEST_NUM_PAGES) {
+                markets.addAll(geckoService.getMarkets("usd", i, ITEMS_PER_PAGE, GeckoOrder.MARKET_CAP_DESC))
+                assertNotNull(markets)
+                assertEquals(markets.size, markets.distinctBy { it.id }.size)
+            }
+            assertEquals(ITEMS_PER_PAGE * TEST_NUM_PAGES, markets.size)
         }
     }
 }

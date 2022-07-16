@@ -7,6 +7,7 @@ import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import retrofit2.HttpException
 import java.io.IOException
 
+const val INITIAL_PAGE = 1
 class MarketsSource(
     private val geckoService: CoinGeckoService,
     private val currency: String,
@@ -29,7 +30,7 @@ class MarketsSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MarketItem> =
         try {
-            val pageNumber = params.key ?: 0
+            val pageNumber = params.key ?: INITIAL_PAGE
             val markets = geckoService.getMarkets(
                 page = pageNumber, itemsPerPage = pageSize,
                 currency = currency, order = order

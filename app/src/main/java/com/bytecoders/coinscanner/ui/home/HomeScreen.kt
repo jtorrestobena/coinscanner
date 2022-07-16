@@ -120,11 +120,11 @@ fun CoinList(
 
             // List of coins
             items(count = coinsItems.itemCount, key = {
-                it //coinsItems[it]?.id.orEmpty()
+                it//coinsItems[it]?.id ?: it
             }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency.currencyCode.lowercase(), Modifier.animateItemPlacement())
+                    CoinItem(it, currency.currencyCode.lowercase(), Modifier/*.animateItemPlacement()*/)
                 }
             }
 
