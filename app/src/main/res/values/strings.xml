@@ -9,4 +9,6 @@
     <string name="market_gecko_desc">Gecko Highest</string>
     <string name="market_volume_asc">Lowest Volume</string>
     <string name="market_volume_desc">Highest Volume</string>
+    <string name="currency_search">Search currency</string>
+    <string name="currency_search_not_found">No currency found for \'%1$s\'</string>
 </resources>

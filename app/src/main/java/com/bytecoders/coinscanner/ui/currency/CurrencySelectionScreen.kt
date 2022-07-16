@@ -1,5 +1,6 @@
 package com.bytecoders.coinscanner.ui.currency
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
@@ -13,6 +14,7 @@ import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,12 +24,17 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.currency.displayTitle
 import com.bytecoders.coinscanner.ui.home.HomeViewModel
@@ -37,8 +44,20 @@ import java.util.*
 @Composable
 fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController) {
     val state: SearchState = rememberSearchState()
+
+    BackHandler {
+        if (state.focused) {
+            state.focused = false
+            state.query = state.query.copy(text = "")
+        } else {
+            navController.popBackStack()
+        }
+    }
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(top = 8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 8.dp)
     ) {
 
         SearchBar(
@@ -63,7 +82,10 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
         when (state.searchDisplay) {
             SearchDisplay.InitialResults, SearchDisplay.Results -> {
                 val currencies = state.searchResults
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                     items(
                         items = currencies,
                         key = { it.currencyCode }
@@ -71,7 +93,6 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
                         ) {
                             ClickableText(
                                 modifier = Modifier
@@ -89,7 +110,15 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                 }
             }
             SearchDisplay.NoResults -> {
-
+                Text(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .wrapContentSize(Alignment.Center),
+                    text = stringResource(id = R.string.currency_search_not_found, state.query.text),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
+                )
             }
 
             SearchDisplay.Suggestions -> {
@@ -163,7 +192,7 @@ fun rememberSearchState(
 }
 
 @Composable
-private fun SearchHint(modifier: Modifier = Modifier) {
+private fun SearchHint(modifier: Modifier = Modifier, textColor: Color) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -172,8 +201,8 @@ private fun SearchHint(modifier: Modifier = Modifier) {
 
     ) {
         Text(
-            color = Color(0xff757575),
-            text = "Search currency",
+            color = textColor,
+            text = stringResource(id = R.string.currency_search),
         )
     }
 }
@@ -195,6 +224,7 @@ fun SearchTextField(
 ) {
 
     val focusRequester = remember { FocusRequester() }
+    val surfaceColor = MaterialTheme.colorScheme.surfaceVariant
 
     Surface(
         modifier = modifier
@@ -208,7 +238,8 @@ fun SearchTextField(
                         end = 16.dp
                     )
             ),
-        color = Color(0xffF5F5F5),
+        color = surfaceColor,
+        contentColor = contentColorFor(surfaceColor),
         shape = RoundedCornerShape(percent = 50),
     ) {
 
@@ -219,7 +250,10 @@ fun SearchTextField(
             ) {
 
                 if (query.text.isEmpty()) {
-                    SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+                    SearchHint(
+                        modifier.padding(start = 24.dp, end = 8.dp),
+                        textColor = contentColorFor(surfaceColor)
+                    )
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -234,7 +268,9 @@ fun SearchTextField(
                             }
                             .focusRequester(focusRequester)
                             .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
-                        singleLine = true
+                        singleLine = true,
+                        textStyle = TextStyle(contentColorFor(backgroundColor = surfaceColor)),
+                        cursorBrush = SolidColor(contentColorFor(backgroundColor = surfaceColor))
                     )
 
                     when {
@@ -247,8 +283,24 @@ fun SearchTextField(
                         }
                         query.text.isNotEmpty() -> {
                             IconButton(onClick = onClearQuery) {
-                                Icon(imageVector = Icons.Filled.Close, contentDescription = null)
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = null,
+                                    tint = contentColorFor(
+                                        backgroundColor = surfaceColor
+                                    )
+                                )
                             }
+                        }
+                        else -> {
+                            Icon(
+                                imageVector = Icons.Filled.Search,
+                                contentDescription = null,
+                                tint = contentColorFor(
+                                    backgroundColor = surfaceColor
+                                ),
+                                modifier = Modifier.padding(end = 16.dp)
+                            )
                         }
                     }
                 }
@@ -266,7 +318,7 @@ fun SearchBar(
     onQueryChange: (TextFieldValue) -> Unit,
     onSearchFocusChange: (Boolean) -> Unit,
     onClearQuery: () -> Unit,
-    onBack: ()-> Unit,
+    onBack: () -> Unit,
     searching: Boolean,
     focused: Boolean,
     modifier: Modifier = Modifier
@@ -283,7 +335,7 @@ fun SearchBar(
         AnimatedVisibility(visible = focused) {
             // Back button
             IconButton(
-                modifier = Modifier.padding(start =2.dp),
+                modifier = Modifier.padding(start = 2.dp),
                 onClick = {
                     focusManager.clearFocus()
                     keyboardController?.hide()

@@ -66,7 +66,6 @@ fun ShimmerGridItem(brush: Brush) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
     ) {
         Row(
             modifier = Modifier

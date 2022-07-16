@@ -60,6 +60,8 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
 }
 
 private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
+private val coinContentPadding = PaddingValues(8.dp)
+private val coinVerticalArrangement = Arrangement.spacedBy(8.dp)
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -79,7 +81,11 @@ fun CoinList(
         state = swipeRefreshState,
         onRefresh = onRefresh
     ) {
-        LazyVerticalGrid(columns = coinColumns) {
+        LazyVerticalGrid(
+            columns = coinColumns,
+            contentPadding = coinContentPadding,
+            verticalArrangement = coinVerticalArrangement
+        ) {
             item {
                 LazyRow {
                     item {
@@ -160,7 +166,6 @@ fun CoinItem(coin: MarketItem, currency: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
     ) {
         ConstraintLayout(
             modifier = Modifier
@@ -239,7 +244,11 @@ fun CoinListPreview() {
             )
         )
     )*/
-    LazyVerticalGrid(columns = coinColumns) {
+    LazyVerticalGrid(
+        columns = coinColumns,
+        contentPadding = coinContentPadding,
+        verticalArrangement = coinVerticalArrangement
+    ) {
         repeat(50) {
             item {
                 CoinItem(
