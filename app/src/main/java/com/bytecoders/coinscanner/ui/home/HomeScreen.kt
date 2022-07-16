@@ -166,7 +166,7 @@ fun CoinList(
 @Composable
 fun CoinItemPreview() {
     CoinItem(
-        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0, marketCap = 123123100.0),
+        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0, marketCap = 123123100.0, symbol = "btc"),
         "usd",
         Modifier
     )
@@ -216,7 +216,7 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .constrainAs(coinPrice) {
-                        top.linkTo(coinName.bottom)
+                        top.linkTo(coinName.bottom, margin = 8.dp)
                         start.linkTo(coinImage.end, margin = 16.dp)
                         end.linkTo(coinTicker.start, margin = 16.dp)
                         width = Dimension.fillToConstraints
@@ -224,7 +224,7 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
             )
 
             Text(
-                text = "BTC",
+                text = coin.symbol.uppercase(),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .constrainAs(coinTicker) {
@@ -278,6 +278,7 @@ fun CoinListPreview() {
                 CoinItem(
                     coin = MarketItem(
                         name = "Top Coin $it",
+                        symbol = "tc$it",
                         currentPrice = Random.nextDouble(),
                         priceChangePercentage24h = Random.nextDouble(-100.0, 100.0)
                     ),
