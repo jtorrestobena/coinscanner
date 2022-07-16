@@ -25,7 +25,8 @@ class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: Coin
             MarketsSource(
                 geckoService,
                 coinMarketConfiguration.currency,
-                coinMarketConfiguration.order
+                coinMarketConfiguration.order,
+                ITEMS_PER_PAGE
             ).apply {
                 marketsSource = this
             }

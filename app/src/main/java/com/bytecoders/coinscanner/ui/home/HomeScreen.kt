@@ -1,11 +1,13 @@
 package com.bytecoders.coinscanner.ui.home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
@@ -63,7 +65,7 @@ private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 private val coinContentPadding = PaddingValues(8.dp)
 private val coinVerticalArrangement = Arrangement.spacedBy(8.dp)
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
@@ -84,7 +86,8 @@ fun CoinList(
         LazyVerticalGrid(
             columns = coinColumns,
             contentPadding = coinContentPadding,
-            verticalArrangement = coinVerticalArrangement
+            verticalArrangement = coinVerticalArrangement,
+            state = rememberLazyGridState()
         ) {
             item {
                 LazyRow {
@@ -117,10 +120,12 @@ fun CoinList(
             }
 
             // List of coins
-            items(count = coinsItems.itemCount) { index ->
+            items(count = coinsItems.itemCount, key = {
+                coinsItems[it]?.id.orEmpty()
+            }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency.currencyCode.lowercase())
+                    CoinItem(it, currency.currencyCode.lowercase(), Modifier.animateItemPlacement())
                 }
             }
 
@@ -157,12 +162,16 @@ fun CoinList(
 @Preview(showBackground = true)
 @Composable
 fun CoinItemPreview() {
-    CoinItem(coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0), "usd")
+    CoinItem(
+        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0),
+        "usd",
+        Modifier
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CoinItem(coin: MarketItem, currency: String) {
+fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -257,7 +266,8 @@ fun CoinListPreview() {
                         currentPrice = Random.nextDouble(),
                         priceChangePercentage24h = Random.nextDouble(-100.0, 100.0)
                     ),
-                    "usd"
+                    "usd",
+                    Modifier
                 )
             }
         }

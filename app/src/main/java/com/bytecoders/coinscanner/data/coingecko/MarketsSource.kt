@@ -10,7 +10,8 @@ import java.io.IOException
 class MarketsSource(
     private val geckoService: CoinGeckoService,
     private val currency: String,
-    private val order: GeckoOrder
+    private val order: GeckoOrder,
+    private val pageSize: Int,
 ) : PagingSource<Int, MarketItem>() {
 
     override val keyReuseSupported: Boolean = true
@@ -25,7 +26,7 @@ class MarketsSource(
         try {
             val pageNumber = params.key ?: 0
             val markets = geckoService.getMarkets(
-                page = pageNumber, itemsPerPage = params.loadSize,
+                page = pageNumber, itemsPerPage = pageSize,
                 currency = currency, order = order
             )
             LoadResult.Page(

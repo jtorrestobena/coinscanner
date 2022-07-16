@@ -122,12 +122,10 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
             }
 
             SearchDisplay.Suggestions -> {
-
             }
         }
     }
 }
-
 
 /**
  * Enum class with different values to set search state based on text, focus, initial state and
@@ -165,10 +163,9 @@ class SearchState(
 
     override fun toString(): String {
         return "🚀 State query: $query, focused: $focused, searching: $searching " +
-                "suggestions: ${suggestions.size}, " +
-                "searchResults: ${searchResults.size}, " +
-                " searchDisplay: $searchDisplay"
-
+            "suggestions: ${suggestions.size}, " +
+            "searchResults: ${searchResults.size}, " +
+            " searchDisplay: $searchDisplay"
     }
 }
 
@@ -306,7 +303,6 @@ fun SearchTextField(
                 }
             }
         }
-
     }
 }
 
@@ -340,7 +336,8 @@ fun SearchBar(
                     focusManager.clearFocus()
                     keyboardController?.hide()
                     onBack()
-                }) {
+                }
+            ) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         }

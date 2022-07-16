@@ -5,11 +5,14 @@
     <ID>FunctionNaming:AppTheme.kt$@Composable fun AppTheme( isDarkTheme: Boolean = isSystemInDarkTheme(), isDynamicColor: Boolean = true, content: @Composable () -> Unit )</ID>
     <ID>FunctionNaming:BottomNavigation.kt$@Composable fun BottomNavigationView(navController: NavController)</ID>
     <ID>FunctionNaming:BottomNavigation.kt$@Composable fun SideNavigationRailView(navController: NavController)</ID>
-    <ID>FunctionNaming:CurrencySelectionScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController)</ID>
+    <ID>FunctionNaming:CurrencySelectionScreen.kt$ @Composable fun SearchTextField( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:CurrencySelectionScreen.kt$@Composable private fun SearchHint(modifier: Modifier = Modifier, textColor: Color)</ID>
+    <ID>FunctionNaming:CurrencySelectionScreen.kt$@ExperimentalAnimationApi @OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class) @Composable fun SearchBar( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, onBack: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
+    <ID>FunctionNaming:CurrencySelectionScreen.kt$@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class) @Composable fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController)</ID>
     <ID>FunctionNaming:HomeScreen.kt$@Composable fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController)</ID>
-    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CoinItem(coin: MarketItem, currency: String)</ID>
-    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterialApi::class) @Composable fun CoinList( coins: Flow&lt;PagingData&lt;MarketItem>>, currency: Currency, isRefreshing: Boolean, onRefresh: () -> Unit, onSortChanged: (GeckoOrder) -> Unit, selectedOrder: GeckoOrder, onCurrencyClicked: () -> Unit, )</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier)</ID>
     <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterialApi::class) @Composable fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit)</ID>
+    <ID>FunctionNaming:HomeScreen.kt$@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class) @Composable fun CoinList( coins: Flow&lt;PagingData&lt;MarketItem>>, currency: Currency, isRefreshing: Boolean, onRefresh: () -> Unit, onSortChanged: (GeckoOrder) -> Unit, selectedOrder: GeckoOrder, onCurrencyClicked: () -> Unit, )</ID>
     <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Composable fun CoinItemPreview()</ID>
     <ID>FunctionNaming:HomeScreen.kt$@Preview(showBackground = true) @Preview(name = "NEXUS_7_2013", device = Devices.NEXUS_7_2013) @Preview(name = "NEXUS_9", device = Devices.NEXUS_9) @Preview(name = "NEXUS_10", device = Devices.NEXUS_10) @Composable fun CoinListPreview()</ID>
     <ID>FunctionNaming:MainScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MainScreen(widthSizeClass: WindowWidthSizeClass)</ID>
@@ -24,8 +27,12 @@
     <ID>FunctionNaming:Shimmer.kt$@Composable fun BrushColors(): List&lt;Color></ID>
     <ID>FunctionNaming:Shimmer.kt$@Composable fun LoadingShimmerEffect()</ID>
     <ID>FunctionNaming:Shimmer.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ShimmerGridItem(brush: Brush)</ID>
-    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CoinItem(coin: MarketItem, currency: String)</ID>
-    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalMaterialApi::class) @Composable fun CoinList( coins: Flow&lt;PagingData&lt;MarketItem>>, currency: Currency, isRefreshing: Boolean, onRefresh: () -> Unit, onSortChanged: (GeckoOrder) -> Unit, selectedOrder: GeckoOrder, onCurrencyClicked: () -> Unit, )</ID>
+    <ID>LongMethod:CurrencySelectionScreen.kt$ @Composable fun SearchTextField( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
+    <ID>LongMethod:CurrencySelectionScreen.kt$@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class) @Composable fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController)</ID>
+    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier)</ID>
+    <ID>LongMethod:HomeScreen.kt$@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class) @Composable fun CoinList( coins: Flow&lt;PagingData&lt;MarketItem>>, currency: Currency, isRefreshing: Boolean, onRefresh: () -> Unit, onSortChanged: (GeckoOrder) -> Unit, selectedOrder: GeckoOrder, onCurrencyClicked: () -> Unit, )</ID>
+    <ID>LongParameterList:CurrencySelectionScreen.kt$( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, onBack: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
+    <ID>LongParameterList:CurrencySelectionScreen.kt$( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
     <ID>LongParameterList:HomeScreen.kt$( coins: Flow&lt;PagingData&lt;MarketItem>>, currency: Currency, isRefreshing: Boolean, onRefresh: () -> Unit, onSortChanged: (GeckoOrder) -> Unit, selectedOrder: GeckoOrder, onCurrencyClicked: () -> Unit, )</ID>
     <ID>MagicNumber:AppTypography.kt$0.25</ID>
     <ID>MagicNumber:Color.kt$0xFF000000</ID>
@@ -71,9 +78,14 @@
     <ID>MagicNumber:HomeScreen.kt$50</ID>
     <ID>MagicNumber:Shimmer.kt$200f</ID>
     <ID>MatchingDeclarationName:WindowSizeClass.kt$WindowSize</ID>
-    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:13</ID>
-    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:14</ID>
-    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:5</ID>
+    <ID>MaxLineLength:CurrencySelectionScreen.kt$style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)</ID>
+    <ID>MaximumLineLength:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:102</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:18</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:19</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:6</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:15</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:16</ID>
+    <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.home.HomeScreen.kt:6</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.navigation.BottomNavigation.kt:4</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.placeholder.Shimmer.kt:3</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.placeholder.Shimmer.kt:5</ID>
