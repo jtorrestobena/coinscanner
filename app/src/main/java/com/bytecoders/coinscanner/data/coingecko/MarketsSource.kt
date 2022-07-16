@@ -14,13 +14,18 @@ class MarketsSource(
     private val pageSize: Int,
 ) : PagingSource<Int, MarketItem>() {
 
-    override val keyReuseSupported: Boolean = true
+    private var resetPage = false
 
-    override fun getRefreshKey(state: PagingState<Int, MarketItem>): Int? =
-        state.anchorPosition?.let {
-            state.closestPageToPosition(it)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+    override fun getRefreshKey(state: PagingState<Int, MarketItem>): Int? {
+        if (resetPage) {
+            resetPage = false
+            return null
         }
+
+        return state.anchorPosition?.let { anchorPosition ->
+            anchorPosition / pageSize
+        }
+    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MarketItem> =
         try {
@@ -30,6 +35,7 @@ class MarketsSource(
                 currency = currency, order = order
             )
             LoadResult.Page(
+                itemsBefore = pageNumber * pageSize,
                 data = markets,
                 prevKey = if (pageNumber > 0) pageNumber - 1 else null,
                 nextKey = if (markets.isNotEmpty()) pageNumber + 1 else null
@@ -39,4 +45,8 @@ class MarketsSource(
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
+
+    fun resetPage() {
+        resetPage = true
+    }
 }

@@ -28,6 +28,9 @@ class CoinGeckoRepositoryImpl @Inject constructor(private val geckoService: Coin
                 coinMarketConfiguration.order,
                 ITEMS_PER_PAGE
             ).apply {
+                if (marketsSource?.invalid == true){
+                    resetPage()
+                }
                 marketsSource = this
             }
         }.flow
