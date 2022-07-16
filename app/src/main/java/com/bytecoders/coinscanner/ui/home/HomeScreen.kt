@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CornerSize
@@ -42,9 +41,6 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlin.random.Random
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.paging.compose.items
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
@@ -65,7 +61,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
 
 private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 private val coinContentPadding = PaddingValues(8.dp)
-private val coinVerticalArrangement = Arrangement.spacedBy(8.dp)
+private val coinArrangement = Arrangement.spacedBy(8.dp)
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -85,12 +81,12 @@ fun CoinList(
         state = swipeRefreshState,
         onRefresh = onRefresh
     ) {
-        LazyColumn(
-            //columns = coinColumns,
+        LazyVerticalGrid(
+            columns = coinColumns,
             contentPadding = coinContentPadding,
-            verticalArrangement = coinVerticalArrangement,
-            //state = rememberLazyGridState()
-            state = rememberLazyListState()
+            verticalArrangement = coinArrangement,
+            horizontalArrangement = coinArrangement,
+            state = rememberLazyGridState()
         ) {
             item {
                 LazyRow {
@@ -271,7 +267,7 @@ fun CoinListPreview() {
     LazyVerticalGrid(
         columns = coinColumns,
         contentPadding = coinContentPadding,
-        verticalArrangement = coinVerticalArrangement
+        verticalArrangement = coinArrangement
     ) {
         repeat(50) {
             item {
