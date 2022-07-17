@@ -88,7 +88,7 @@ fun CoinList(
             horizontalArrangement = coinArrangement,
             state = rememberLazyGridState()
         ) {
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 LazyRow {
                     item {
                         SortMenu(selectedOrder = selectedOrder, onSortChanged = onSortChanged)
@@ -292,7 +292,7 @@ fun CoinListPreview() {
 fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
+    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp).fillMaxWidth()) {
         Chip(
             shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
             onClick = { expanded = true },
