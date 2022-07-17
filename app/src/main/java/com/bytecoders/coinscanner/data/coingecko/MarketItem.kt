@@ -1,7 +1,11 @@
 package com.bytecoders.coinscanner.data.coingecko
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "market_item")
 data class MarketItem(
     @SerializedName("ath")
     val ath: Double = 0.0,
@@ -23,6 +27,7 @@ data class MarketItem(
     val fullyDilutedValuation: Double = 0.0,
     @SerializedName("high_24h")
     val high24h: Double = 0.0,
+    @PrimaryKey
     @SerializedName("id")
     val id: String = "",
     @SerializedName("image")
@@ -47,6 +52,7 @@ data class MarketItem(
     val priceChange24h: Double = 0.0,
     @SerializedName("price_change_percentage_24h")
     val priceChangePercentage24h: Double = 0.0,
+    @Embedded
     @SerializedName("roi")
     val roi: Roi = Roi(),
     @SerializedName("symbol")

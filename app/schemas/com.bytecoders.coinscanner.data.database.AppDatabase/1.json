@@ -1,0 +1,196 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "890d76635f8400eeb20c3016a470a6e4",
+    "entities": [
+      {
+        "tableName": "market_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ath` REAL NOT NULL, `athChangePercentage` REAL NOT NULL, `athDate` TEXT NOT NULL, `atl` REAL NOT NULL, `atlChangePercentage` REAL NOT NULL, `atlDate` TEXT NOT NULL, `circulatingSupply` REAL NOT NULL, `currentPrice` REAL NOT NULL, `fullyDilutedValuation` REAL NOT NULL, `high24h` REAL NOT NULL, `id` TEXT NOT NULL, `image` TEXT NOT NULL, `lastUpdated` TEXT NOT NULL, `low24h` REAL NOT NULL, `marketCap` REAL NOT NULL, `marketCapChange24h` REAL NOT NULL, `marketCapChangePercentage24h` REAL NOT NULL, `marketCapRank` INTEGER NOT NULL, `maxSupply` REAL NOT NULL, `name` TEXT NOT NULL, `priceChange24h` REAL NOT NULL, `priceChangePercentage24h` REAL NOT NULL, `symbol` TEXT NOT NULL, `totalSupply` REAL NOT NULL, `totalVolume` REAL NOT NULL, `currency` TEXT NOT NULL, `percentage` REAL NOT NULL, `times` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "ath",
+            "columnName": "ath",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "athChangePercentage",
+            "columnName": "athChangePercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "athDate",
+            "columnName": "athDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "atl",
+            "columnName": "atl",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "atlChangePercentage",
+            "columnName": "atlChangePercentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "atlDate",
+            "columnName": "atlDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "circulatingSupply",
+            "columnName": "circulatingSupply",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentPrice",
+            "columnName": "currentPrice",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullyDilutedValuation",
+            "columnName": "fullyDilutedValuation",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "high24h",
+            "columnName": "high24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdated",
+            "columnName": "lastUpdated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "low24h",
+            "columnName": "low24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCap",
+            "columnName": "marketCap",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCapChange24h",
+            "columnName": "marketCapChange24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCapChangePercentage24h",
+            "columnName": "marketCapChangePercentage24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCapRank",
+            "columnName": "marketCapRank",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "maxSupply",
+            "columnName": "maxSupply",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChange24h",
+            "columnName": "priceChange24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "priceChangePercentage24h",
+            "columnName": "priceChangePercentage24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalSupply",
+            "columnName": "totalSupply",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalVolume",
+            "columnName": "totalVolume",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roi.currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roi.percentage",
+            "columnName": "percentage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "roi.times",
+            "columnName": "times",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '890d76635f8400eeb20c3016a470a6e4')"
+    ]
+  }
+}

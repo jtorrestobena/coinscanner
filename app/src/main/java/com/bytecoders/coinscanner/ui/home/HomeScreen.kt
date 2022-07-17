@@ -63,7 +63,7 @@ private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 private val coinContentPadding = PaddingValues(8.dp)
 private val coinArrangement = Arrangement.spacedBy(8.dp)
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
@@ -120,11 +120,11 @@ fun CoinList(
 
             // List of coins
             items(count = coinsItems.itemCount, key = {
-                it//coinsItems[it]?.id ?: it
+                it //coinsItems[it]?.id ?: it
             }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency.currencyCode.lowercase(), Modifier/*.animateItemPlacement()*/)
+                    CoinItem(it, currency.currencyCode.lowercase(), Modifier.animateItemPlacement())
                 }
             }
 
