@@ -97,10 +97,7 @@ fun CoinList(
                     item {
                         Chip(
                             shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
-                            onClick = {
-                                onCurrencyClicked()
-                                coinsItems.refresh()
-                            },
+                            onClick = onCurrencyClicked,
                             border = BorderStroke(
                                 ChipDefaults.OutlinedBorderSize,
                                 MaterialTheme.colorScheme.primary

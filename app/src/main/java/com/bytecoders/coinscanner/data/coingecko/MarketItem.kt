@@ -3,6 +3,7 @@ package com.bytecoders.coinscanner.data.coingecko
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Query
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "market_item")
@@ -12,13 +13,13 @@ data class MarketItem(
     @SerializedName("ath_change_percentage")
     val athChangePercentage: Double = 0.0,
     @SerializedName("ath_date")
-    val athDate: String = "",
+    val athDate: String? = null,
     @SerializedName("atl")
     val atl: Double = 0.0,
     @SerializedName("atl_change_percentage")
     val atlChangePercentage: Double = 0.0,
     @SerializedName("atl_date")
-    val atlDate: String = "",
+    val atlDate: String? = null,
     @SerializedName("circulating_supply")
     val circulatingSupply: Double = 0.0,
     @SerializedName("current_price")
@@ -60,5 +61,6 @@ data class MarketItem(
     @SerializedName("total_supply")
     val totalSupply: Double = 0.0,
     @SerializedName("total_volume")
-    val totalVolume: Double = 0.0
+    val totalVolume: Double = 0.0,
+    val query: String = ""
 )

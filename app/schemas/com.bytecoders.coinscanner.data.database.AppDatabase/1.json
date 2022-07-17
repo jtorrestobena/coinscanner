@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2a0b060b421f4d7c2c66944c973eac87",
+    "identityHash": "327ef6887a7f5bd4ef97b8fa19dc103d",
     "entities": [
       {
         "tableName": "market_item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ath` REAL NOT NULL, `athChangePercentage` REAL NOT NULL, `athDate` TEXT NOT NULL, `atl` REAL NOT NULL, `atlChangePercentage` REAL NOT NULL, `atlDate` TEXT NOT NULL, `circulatingSupply` REAL NOT NULL, `currentPrice` REAL NOT NULL, `fullyDilutedValuation` REAL NOT NULL, `high24h` REAL NOT NULL, `id` TEXT NOT NULL, `image` TEXT NOT NULL, `lastUpdated` TEXT NOT NULL, `low24h` REAL NOT NULL, `marketCap` REAL NOT NULL, `marketCapChange24h` REAL NOT NULL, `marketCapChangePercentage24h` REAL NOT NULL, `marketCapRank` INTEGER NOT NULL, `maxSupply` REAL NOT NULL, `name` TEXT NOT NULL, `priceChange24h` REAL NOT NULL, `priceChangePercentage24h` REAL NOT NULL, `symbol` TEXT NOT NULL, `totalSupply` REAL NOT NULL, `totalVolume` REAL NOT NULL, `roi_currency` TEXT, `roi_percentage` REAL, `roi_times` REAL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ath` REAL NOT NULL, `athChangePercentage` REAL NOT NULL, `athDate` TEXT, `atl` REAL NOT NULL, `atlChangePercentage` REAL NOT NULL, `atlDate` TEXT, `circulatingSupply` REAL NOT NULL, `currentPrice` REAL NOT NULL, `fullyDilutedValuation` REAL NOT NULL, `high24h` REAL NOT NULL, `id` TEXT NOT NULL, `image` TEXT NOT NULL, `lastUpdated` TEXT NOT NULL, `low24h` REAL NOT NULL, `marketCap` REAL NOT NULL, `marketCapChange24h` REAL NOT NULL, `marketCapChangePercentage24h` REAL NOT NULL, `marketCapRank` INTEGER NOT NULL, `maxSupply` REAL NOT NULL, `name` TEXT NOT NULL, `priceChange24h` REAL NOT NULL, `priceChangePercentage24h` REAL NOT NULL, `symbol` TEXT NOT NULL, `totalSupply` REAL NOT NULL, `totalVolume` REAL NOT NULL, `query` TEXT NOT NULL, `roi_currency` TEXT, `roi_percentage` REAL, `roi_times` REAL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "ath",
@@ -24,7 +24,7 @@
             "fieldPath": "athDate",
             "columnName": "athDate",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "atl",
@@ -42,7 +42,7 @@
             "fieldPath": "atlDate",
             "columnName": "atlDate",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "circulatingSupply",
@@ -159,6 +159,12 @@
             "notNull": true
           },
           {
+            "fieldPath": "query",
+            "columnName": "query",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "roi.currency",
             "columnName": "roi_currency",
             "affinity": "TEXT",
@@ -190,7 +196,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2a0b060b421f4d7c2c66944c973eac87')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '327ef6887a7f5bd4ef97b8fa19dc103d')"
     ]
   }
 }

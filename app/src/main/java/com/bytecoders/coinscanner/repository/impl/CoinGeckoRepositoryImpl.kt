@@ -17,33 +17,23 @@ class CoinGeckoRepositoryImpl @Inject constructor(
     private val marketItemsDao: MarketItemsDao
 ) :
     CoinGeckoRepository {
-
-    private var marketsSource: PagingSource<Int, MarketItem>? = null
-    private var coinMarketConfiguration = CoinMarketConfiguration()
+    private var marketsSource: MarketsSource? = null
 
     override fun getMarkets(configuration: CoinMarketConfiguration): MarketsSource {
-        coinMarketConfiguration = configuration
         return MarketsSource(
             geckoService,
             appDatabase,
             marketItemsDao,
-            coinMarketConfiguration.currency,
-            coinMarketConfiguration.order,
-            ITEMS_PER_PAGE
-        )
+            configuration
+        ).apply {
+            marketsSource = this
+        }
     }
 
     override fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem> =
-        /*marketItemsDao.pagingSource(
-            marketConfiguration.currency,
-            //marketConfiguration.order,
-            marketConfiguration.itemsPerPage
-        )*/
-        marketItemsDao.getAllMarketItems().apply {
-            marketsSource = this
-        }
+        marketItemsDao.sourceForQuery(marketConfiguration.query)
 
     override fun updateConfiguration(newConfiguration: CoinMarketConfiguration) {
-        coinMarketConfiguration = newConfiguration
+        marketsSource?.coinMarketConfiguration = newConfiguration
     }
 }

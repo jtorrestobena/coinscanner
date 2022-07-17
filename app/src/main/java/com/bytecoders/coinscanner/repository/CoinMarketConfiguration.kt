@@ -6,4 +6,6 @@ data class CoinMarketConfiguration(
     val currency: String = "usd",
     val itemsPerPage: Int = 0,
     val order: GeckoOrder = GeckoOrder.MARKET_CAP_DESC
-)
+) {
+    val query = "$currency:$order"
+}
