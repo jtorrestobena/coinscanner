@@ -120,7 +120,7 @@ fun CoinList(
 
             // List of coins
             items(count = coinsItems.itemCount, key = {
-                it //coinsItems[it]?.id ?: it
+                coinsItems[it]?.id ?: it
             }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
@@ -172,7 +172,7 @@ fun CoinItemPreview() {
 @Composable
 fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
     Card(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
     ) {
         ConstraintLayout(

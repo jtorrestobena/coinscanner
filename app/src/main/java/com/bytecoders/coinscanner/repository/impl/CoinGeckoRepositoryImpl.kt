@@ -24,21 +24,19 @@ class CoinGeckoRepositoryImpl @Inject constructor(
     private var marketsSource: MarketsSource? = null
     private var coinMarketConfiguration = CoinMarketConfiguration()
 
-    override fun getMarkets(configuration: CoinMarketConfiguration): Flow<PagingData<MarketItem>> {
+    override fun getMarkets(configuration: CoinMarketConfiguration): MarketsSource {
         coinMarketConfiguration = configuration
-        return Pager(PagingConfig(pageSize = ITEMS_PER_PAGE)) {
-            MarketsSource(
-                geckoService,
-                coinMarketConfiguration.currency,
-                coinMarketConfiguration.order,
-                ITEMS_PER_PAGE
-            ).apply {
-                if (marketsSource?.invalid == true) {
-                    resetPage()
-                }
-                marketsSource = this
+        return MarketsSource(
+            geckoService,
+            coinMarketConfiguration.currency,
+            coinMarketConfiguration.order,
+            ITEMS_PER_PAGE
+        ).apply {
+            if (marketsSource?.invalid == true) {
+                resetPage()
             }
-        }.flow
+            marketsSource = this
+        }
     }
 
     override fun refreshMarkets(newConfiguration: CoinMarketConfiguration?) {
