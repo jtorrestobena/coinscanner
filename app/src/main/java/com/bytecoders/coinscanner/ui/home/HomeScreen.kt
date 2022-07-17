@@ -172,7 +172,7 @@ fun CoinItemPreview() {
 @Composable
 fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         ConstraintLayout(

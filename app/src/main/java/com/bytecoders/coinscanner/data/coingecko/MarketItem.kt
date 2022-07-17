@@ -52,9 +52,9 @@ data class MarketItem(
     val priceChange24h: Double = 0.0,
     @SerializedName("price_change_percentage_24h")
     val priceChangePercentage24h: Double = 0.0,
-    @Embedded
+    @Embedded(prefix = "roi_")
     @SerializedName("roi")
-    val roi: Roi = Roi(),
+    val roi: Roi? = null,
     @SerializedName("symbol")
     val symbol: String = "",
     @SerializedName("total_supply")
