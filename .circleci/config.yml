@@ -25,6 +25,12 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      # Generate Gradle wrapper
+      - run:
+          name: Generate Gradle wrapper
+          command: |
+            gradle wrapper
+
       # The next step will run the unit tests
       - android/run-tests:
           test-command: ./gradlew lint testDebug --continue
