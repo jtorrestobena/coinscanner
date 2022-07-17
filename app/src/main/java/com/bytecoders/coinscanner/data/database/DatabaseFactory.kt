@@ -13,13 +13,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object DatabaseFactory {
     @Provides
+    @Singleton
     fun provideApplicationDatabase(@ApplicationContext application: Context): AppDatabase =
         Room.databaseBuilder(
             application,
             AppDatabase::class.java, "database-coin_scanner"
         ).build()
 
-    @Singleton
     @Provides
     fun provideMarketItemsDao(db: AppDatabase): MarketItemsDao = db.marketsDao()
 }

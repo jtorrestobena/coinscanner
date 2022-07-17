@@ -1,5 +1,7 @@
 package com.bytecoders.coinscanner.repository
 
+import androidx.paging.PagingSource
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 
 interface CoinGeckoRepository {
@@ -8,5 +10,7 @@ interface CoinGeckoRepository {
         configuration: CoinMarketConfiguration
     ): MarketsSource
 
-    fun refreshMarkets(newConfiguration: CoinMarketConfiguration? = null)
+    fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem>
+
+    fun updateConfiguration(newConfiguration: CoinMarketConfiguration)
 }

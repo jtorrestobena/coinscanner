@@ -1,14 +1,13 @@
 package com.bytecoders.coinscanner.ui.home
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
+import androidx.paging.*
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
@@ -20,7 +19,6 @@ import java.util.*
 import javax.inject.Inject
 
 const val ITEMS_PER_PAGE = 50
-const val LOAD_MAX_3_TIMES_PAGE_SIZE = 3 * ITEMS_PER_PAGE
 
 data class HomeUiState(
     val marketOrdering: GeckoOrder = GeckoOrder.MARKET_CAP_DESC,
@@ -43,29 +41,20 @@ class HomeViewModel @Inject constructor(
             order = uiState.marketOrdering
         )
 
+    @OptIn(ExperimentalPagingApi::class)
     val markets: Flow<PagingData<MarketItem>> = Pager(
-        PagingConfig(
-            pageSize = ITEMS_PER_PAGE,
-            enablePlaceholders = false,
-            maxSize = LOAD_MAX_3_TIMES_PAGE_SIZE,
-            initialLoadSize = ITEMS_PER_PAGE
-        )
-    ) {
-        coinGeckoRepository.getMarkets(marketConfiguration)
-    }.flow.cachedIn(viewModelScope)
-
-    fun refreshMarkets() {
-        uiState = uiState.copy(isRefreshing = true)
-        coinGeckoRepository.refreshMarkets()
-    }
+        config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+        remoteMediator = coinGeckoRepository.getMarkets(marketConfiguration),
+        pagingSourceFactory = { coinGeckoRepository.pagingSource(marketConfiguration) }
+    ).flow.cachedIn(viewModelScope)
 
     fun changeOrder(newOrdering: GeckoOrder) {
         uiState = uiState.copy(marketOrdering = newOrdering)
-        coinGeckoRepository.refreshMarkets(marketConfiguration)
+        coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 
     fun changeCurrency(newCurrency: Currency) {
         uiState = uiState.copy(currency = newCurrency)
-        coinGeckoRepository.refreshMarkets(marketConfiguration)
+        coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 }

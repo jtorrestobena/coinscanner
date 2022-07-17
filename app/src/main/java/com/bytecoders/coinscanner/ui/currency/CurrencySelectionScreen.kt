@@ -34,16 +34,22 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.currency.displayTitle
+import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ui.home.HomeViewModel
+import kotlinx.coroutines.coroutineScope
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController) {
     val state: SearchState = rememberSearchState()
+
+    val coinsItems: LazyPagingItems<MarketItem> = viewModel.markets.collectAsLazyPagingItems()
 
     BackHandler {
         if (state.focused) {
@@ -102,6 +108,7 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                                 style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary),
                                 onClick = {
                                     viewModel.changeCurrency(currency)
+                                    coinsItems.refresh()
                                     navController.popBackStack()
                                 }
                             )
