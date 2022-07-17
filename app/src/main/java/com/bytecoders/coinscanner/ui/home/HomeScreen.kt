@@ -63,7 +63,7 @@ private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 private val coinContentPadding = PaddingValues(8.dp)
 private val coinArrangement = Arrangement.spacedBy(8.dp)
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
@@ -267,7 +267,8 @@ fun CoinListPreview() {
     LazyVerticalGrid(
         columns = coinColumns,
         contentPadding = coinContentPadding,
-        verticalArrangement = coinArrangement
+        verticalArrangement = coinArrangement,
+        horizontalArrangement = coinArrangement
     ) {
         repeat(50) {
             item {
