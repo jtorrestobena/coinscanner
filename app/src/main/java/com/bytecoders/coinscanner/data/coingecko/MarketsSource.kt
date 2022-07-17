@@ -25,40 +25,6 @@ class MarketsSource(
 
     private var currentPage = INITIAL_PAGE
 
-    /*override fun getRefreshKey(state: PagingState<Int, MarketItem>): Int? {
-        if (resetPage) {
-            resetPage = false
-            return null
-        }
-
-        return state.anchorPosition?.let { anchorPosition ->
-            anchorPosition / pageSize
-        }
-    }
-
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MarketItem> =
-        try {
-            val pageNumber = params.key ?: INITIAL_PAGE
-            val markets = geckoService.getMarkets(
-                page = pageNumber, itemsPerPage = pageSize,
-                currency = currency, order = order
-            )
-            LoadResult.Page(
-                itemsBefore = pageNumber * pageSize,
-                data = markets,
-                prevKey = if (pageNumber > 0) pageNumber - 1 else null,
-                nextKey = if (markets.isNotEmpty()) pageNumber + 1 else null
-            )
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
-        }
-
-    fun resetPage() {
-        resetPage = true
-    }
-*/
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, MarketItem>
@@ -68,8 +34,11 @@ class MarketsSource(
             // parameter. For every page after the first, pass the last user
             // ID to let it continue from where it left off. For REFRESH,
             // pass null to load the first page.
-            val loadKey = when (loadType) {
-                LoadType.REFRESH -> null
+            val pageNumber = when (loadType) {
+                LoadType.REFRESH -> {
+                    currentPage = INITIAL_PAGE
+                    currentPage
+                }
                 // In this example, you never need to prepend, since REFRESH
                 // will always load the first page in the list. Immediately
                 // return, reporting end of pagination.
@@ -92,7 +61,6 @@ class MarketsSource(
                 }
             }
 
-            val pageNumber = loadKey ?: INITIAL_PAGE
             val markets = geckoService.getMarkets(
                 page = pageNumber, itemsPerPage = pageSize,
                 currency = currency, order = order

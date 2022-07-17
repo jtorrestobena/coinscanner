@@ -1,11 +1,13 @@
 package com.bytecoders.coinscanner.ui.home
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
@@ -46,18 +48,13 @@ class HomeViewModel @Inject constructor(
         pagingSourceFactory = { coinGeckoRepository.pagingSource(marketConfiguration) }
     ).flow.cachedIn(viewModelScope)
 
-    fun refreshMarkets() {
-        uiState = uiState.copy(isRefreshing = true)
-        coinGeckoRepository.refreshMarkets()
-    }
-
     fun changeOrder(newOrdering: GeckoOrder) {
         uiState = uiState.copy(marketOrdering = newOrdering)
-        coinGeckoRepository.refreshMarkets(marketConfiguration)
+        coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 
     fun changeCurrency(newCurrency: Currency) {
         uiState = uiState.copy(currency = newCurrency)
-        coinGeckoRepository.refreshMarkets(marketConfiguration)
+        coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 }

@@ -48,7 +48,6 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
         coins = viewModel.markets,
         currency = viewModel.uiState.currency,
         isRefreshing = viewModel.uiState.isRefreshing,
-        onRefresh = { viewModel.refreshMarkets() },
         onSortChanged = { viewModel.changeOrder(it) },
         selectedOrder = viewModel.uiState.marketOrdering,
         onCurrencyClicked = {
@@ -69,7 +68,6 @@ fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
     currency: Currency,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit,
     onSortChanged: (GeckoOrder) -> Unit,
     selectedOrder: GeckoOrder,
     onCurrencyClicked: () -> Unit,
@@ -79,7 +77,7 @@ fun CoinList(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
     SwipeRefresh(
         state = swipeRefreshState,
-        onRefresh = onRefresh
+        onRefresh = { coinsItems.refresh() }
     ) {
         LazyVerticalGrid(
             columns = coinColumns,
@@ -91,12 +89,18 @@ fun CoinList(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 LazyRow {
                     item {
-                        SortMenu(selectedOrder = selectedOrder, onSortChanged = onSortChanged)
+                        SortMenu(selectedOrder = selectedOrder, onSortChanged = {
+                            onSortChanged(it)
+                            coinsItems.refresh()
+                        })
                     }
                     item {
                         Chip(
                             shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
-                            onClick = onCurrencyClicked,
+                            onClick = {
+                                onCurrencyClicked()
+                                coinsItems.refresh()
+                            },
                             border = BorderStroke(
                                 ChipDefaults.OutlinedBorderSize,
                                 MaterialTheme.colorScheme.primary
@@ -162,7 +166,12 @@ fun CoinList(
 @Composable
 fun CoinItemPreview() {
     CoinItem(
-        coin = MarketItem(name = "Bitcoin", currentPrice = 12000.0, marketCap = 123123100.0, symbol = "btc"),
+        coin = MarketItem(
+            name = "Bitcoin",
+            currentPrice = 12000.0,
+            marketCap = 123123100.0,
+            symbol = "btc"
+        ),
         "usd",
         Modifier
     )
@@ -294,7 +303,11 @@ fun CoinListPreview() {
 fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp).fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp)
+            .fillMaxWidth()
+    ) {
         Chip(
             shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
             onClick = { expanded = true },

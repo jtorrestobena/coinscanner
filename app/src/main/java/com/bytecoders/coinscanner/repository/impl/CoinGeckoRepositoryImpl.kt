@@ -18,7 +18,7 @@ class CoinGeckoRepositoryImpl @Inject constructor(
 ) :
     CoinGeckoRepository {
 
-    private var marketsSource: MarketsSource? = null
+    private var marketsSource: PagingSource<Int, MarketItem>? = null
     private var coinMarketConfiguration = CoinMarketConfiguration()
 
     override fun getMarkets(configuration: CoinMarketConfiguration): MarketsSource {
@@ -30,9 +30,7 @@ class CoinGeckoRepositoryImpl @Inject constructor(
             coinMarketConfiguration.currency,
             coinMarketConfiguration.order,
             ITEMS_PER_PAGE
-        ).apply {
-            marketsSource = this
-        }
+        )
     }
 
     override fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem> =
@@ -41,12 +39,11 @@ class CoinGeckoRepositoryImpl @Inject constructor(
             //marketConfiguration.order,
             marketConfiguration.itemsPerPage
         )*/
-        marketItemsDao.getAllMarketItems()
-
-    override fun refreshMarkets(newConfiguration: CoinMarketConfiguration?) {
-        newConfiguration?.let {
-            coinMarketConfiguration = it
+        marketItemsDao.getAllMarketItems().apply {
+            marketsSource = this
         }
-        //marketsSource?.
+
+    override fun updateConfiguration(newConfiguration: CoinMarketConfiguration) {
+        coinMarketConfiguration = newConfiguration
     }
 }

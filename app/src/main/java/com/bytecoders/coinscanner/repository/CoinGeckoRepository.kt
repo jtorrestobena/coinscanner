@@ -12,5 +12,5 @@ interface CoinGeckoRepository {
 
     fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem>
 
-    fun refreshMarkets(newConfiguration: CoinMarketConfiguration? = null)
+    fun updateConfiguration(newConfiguration: CoinMarketConfiguration)
 }
