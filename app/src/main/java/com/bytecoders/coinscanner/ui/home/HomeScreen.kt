@@ -252,7 +252,9 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
 @Preview(name = "NEXUS_10", device = Devices.NEXUS_10)
 @Composable
 fun CoinListPreview() {
-    /* https://issuetracker.google.com/issues/194544557?pli=1
+    /*
+    This is not working as of now, see ticket:
+    https://issuetracker.google.com/issues/194544557?pli=1
     CoinList(
         coins = flowOf(
             PagingData.from(
