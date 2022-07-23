@@ -8,6 +8,7 @@ import androidx.room.withTransaction
 import com.bytecoders.coinscanner.data.database.AppDatabase
 import com.bytecoders.coinscanner.data.database.MarketItemsDao
 import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
+import com.bytecoders.coinscanner.repository.DEFAULT_CURRENCY
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import retrofit2.HttpException
@@ -41,12 +42,24 @@ class MarketsSource(
                 }
             }
 
-            val markets = geckoService.getMarkets(
-                page = currentPage,
-                itemsPerPage = coinMarketConfiguration.itemsPerPage,
-                currency = coinMarketConfiguration.currency,
-                order = coinMarketConfiguration.order
-            )
+            val markets = try {
+                geckoService.getMarkets(
+                    page = currentPage,
+                    itemsPerPage = coinMarketConfiguration.itemsPerPage,
+                    currency = coinMarketConfiguration.currency,
+                    order = coinMarketConfiguration.order
+                )
+            } catch (e: HttpException) {
+                /**
+                 * Fallback to DEFAULT_CURRENCY if API does not support it
+                 */
+                geckoService.getMarkets(
+                    page = currentPage,
+                    itemsPerPage = coinMarketConfiguration.itemsPerPage,
+                    currency = DEFAULT_CURRENCY,
+                    order = coinMarketConfiguration.order
+                )
+            }
 
             appDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
