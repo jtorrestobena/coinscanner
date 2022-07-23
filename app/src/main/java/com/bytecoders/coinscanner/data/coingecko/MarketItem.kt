@@ -33,7 +33,7 @@ data class MarketItem(
     @SerializedName("image")
     val image: String = "",
     @SerializedName("last_updated")
-    val lastUpdated: String = "",
+    val lastUpdated: String? = null,
     @SerializedName("low_24h")
     val low24h: Double = 0.0,
     @SerializedName("market_cap")
