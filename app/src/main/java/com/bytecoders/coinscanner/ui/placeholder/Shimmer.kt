@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BrushColors(): List<Color> {
+fun brushColors(): List<Color> {
     return listOf(
         MaterialTheme.colorScheme.inversePrimary.copy(alpha = 0.9f),
         MaterialTheme.colorScheme.inversePrimary.copy(alpha = 0.4f),
@@ -29,13 +29,13 @@ fun BrushColors(): List<Color> {
 @Preview(showBackground = true)
 fun ShimmerPreview() {
     ShimmerGridItem(
-        brush = linearGradient(BrushColors())
+        brush = linearGradient(brushColors())
     )
 }
 
 @Composable
 fun LoadingShimmerEffect() {
-    val gradient = BrushColors()
+    val gradient = brushColors()
 
     val transition = rememberInfiniteTransition() // animate infinite times
 
