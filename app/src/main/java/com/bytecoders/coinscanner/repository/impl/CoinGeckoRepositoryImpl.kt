@@ -8,11 +8,12 @@ import com.bytecoders.coinscanner.data.database.MarketItemsDao
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
 import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
-import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
+import com.bytecoders.coinscanner.service.currency.CurrencyService
 import javax.inject.Inject
 
 class CoinGeckoRepositoryImpl @Inject constructor(
     private val geckoService: CoinGeckoService,
+    private val currencyService: CurrencyService,
     private val appDatabase: AppDatabase,
     private val marketItemsDao: MarketItemsDao
 ) :
@@ -22,6 +23,7 @@ class CoinGeckoRepositoryImpl @Inject constructor(
     override fun getMarkets(configuration: CoinMarketConfiguration): MarketsSource {
         return MarketsSource(
             geckoService,
+            currencyService,
             appDatabase,
             marketItemsDao,
             configuration

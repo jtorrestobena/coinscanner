@@ -3,7 +3,6 @@ package com.bytecoders.coinscanner.data.coingecko
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Query
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "market_item")
