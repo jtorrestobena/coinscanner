@@ -41,7 +41,6 @@ import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.currency.displayTitle
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ui.home.HomeViewModel
-import kotlinx.coroutines.coroutineScope
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
@@ -122,7 +121,10 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                         .fillMaxSize()
                         .padding(16.dp)
                         .wrapContentSize(Alignment.Center),
-                    text = stringResource(id = R.string.currency_search_not_found, state.query.text),
+                    text = stringResource(
+                        id = R.string.currency_search_not_found,
+                        state.query.text
+                    ),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
                 )

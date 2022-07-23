@@ -2,6 +2,7 @@ package com.bytecoders.coinscanner.service
 
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.converter.EnumConverterFactory
+import com.bytecoders.coinscanner.service.currency.CurrencyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,29 +15,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(ViewModelComponent::class)
 object ServiceFactory {
+    private const val RAPID_API_KEY = "9dca701489msha60ad7038f0b5fap150af9jsnd6101dc279bf"
+
     @Provides
     fun provideCoinGeckoService(): CoinGeckoService {
+        val host = "coingecko.p.rapidapi.com"
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://coingecko.p.rapidapi.com/")
+            .baseUrl("https://$host/")
             .client(
-                OkHttpClient.Builder()
-                    .addInterceptor {
-                        it.proceed(
-                            it.request().newBuilder()
-                                .addHeader(
-                                    "x-rapidapi-key",
-                                    "9dca701489msha60ad7038f0b5fap150af9jsnd6101dc279bf"
-                                )
-                                .addHeader("x-rapidapi-host", "coingecko.p.rapidapi.com")
-                                .build()
-                        )
-                    }
-                    .addInterceptor(
-                        HttpLoggingInterceptor().apply {
-                            level = HttpLoggingInterceptor.Level.BODY
-                        }
-                    )
-                    .build()
+                getRapidApiOkHttpClient(
+                    host
+                )
             )
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(EnumConverterFactory())
@@ -44,4 +33,39 @@ object ServiceFactory {
 
         return retrofit.create(CoinGeckoService::class.java)
     }
+
+    @Provides
+    fun provideCurrencyService(): CurrencyService {
+        val host = "currency-converter-by-api-ninjas.p.rapidapi.com"
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://$host/v1/")
+            .client(
+                getRapidApiOkHttpClient(
+                    host
+                )
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(CurrencyService::class.java)
+    }
+
+    private fun getRapidApiOkHttpClient(apiHost: String) = OkHttpClient.Builder()
+        .addInterceptor {
+            it.proceed(
+                it.request().newBuilder()
+                    .addHeader(
+                        "x-rapidapi-key",
+                        RAPID_API_KEY
+                    )
+                    .addHeader("x-rapidapi-host", apiHost)
+                    .build()
+            )
+        }
+        .addInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        )
+        .build()
 }

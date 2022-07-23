@@ -1,13 +1,11 @@
 package com.bytecoders.coinscanner.ui.home
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.repository.CoinGeckoRepository
