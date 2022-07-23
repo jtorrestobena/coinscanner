@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -213,6 +214,7 @@ private fun SearchHint(modifier: Modifier = Modifier, textColor: Color) {
     }
 }
 
+const val SEARCH_FIELD_TAG = "SEARCH_FIELD_TAG"
 /**
  * This is a stateless TextField for searching with a Hint when query is empty,
  * and clear and loading [IconButton]s to clear query or show progress indicator when
@@ -273,7 +275,8 @@ fun SearchTextField(
                                 onSearchFocusChange(it.isFocused)
                             }
                             .focusRequester(focusRequester)
-                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
+                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp)
+                            .testTag(SEARCH_FIELD_TAG),
                         singleLine = true,
                         textStyle = TextStyle(contentColorFor(backgroundColor = surfaceColor)),
                         cursorBrush = SolidColor(contentColorFor(backgroundColor = surfaceColor))
