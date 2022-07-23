@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
+import com.bytecoders.coinscanner.ellipsis
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
 import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
@@ -205,6 +207,8 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
             )
             Text(
                 text = coin.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .constrainAs(coinName) {
                         top.linkTo(parent.top)
@@ -226,7 +230,7 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
             )
 
             Text(
-                text = coin.symbol.uppercase(),
+                text = coin.symbol.uppercase().ellipsis(4),
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier
                     .constrainAs(coinTicker) {
@@ -282,8 +286,8 @@ fun CoinListPreview() {
             item {
                 CoinItem(
                     coin = MarketItem(
-                        name = "Top Coin $it",
-                        symbol = "tc$it",
+                        name = "Top Coin $it that has a very long name and does not fit easily everywhere",
+                        symbol = "tc${it}couldbealsolong",
                         currentPrice = Random.nextDouble(),
                         priceChangePercentage24h = Random.nextDouble(-100.0, 100.0)
                     ),
