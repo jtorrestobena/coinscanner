@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.util.*
 
 @Entity(tableName = "market_item")
 data class MarketItem(
@@ -12,13 +13,13 @@ data class MarketItem(
     @SerializedName("ath_change_percentage")
     val athChangePercentage: Double = 0.0,
     @SerializedName("ath_date")
-    val athDate: String? = null,
+    val athDate: Date? = null,
     @SerializedName("atl")
     val atl: Double = 0.0,
     @SerializedName("atl_change_percentage")
     val atlChangePercentage: Double = 0.0,
     @SerializedName("atl_date")
-    val atlDate: String? = null,
+    val atlDate: Date? = null,
     @SerializedName("circulating_supply")
     val circulatingSupply: Double = 0.0,
     @SerializedName("current_price")
@@ -33,7 +34,7 @@ data class MarketItem(
     @SerializedName("image")
     val image: String = "",
     @SerializedName("last_updated")
-    val lastUpdated: String? = null,
+    val lastUpdated: Date? = null,
     @SerializedName("low_24h")
     val low24h: Double = 0.0,
     @SerializedName("market_cap")
