@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "327ef6887a7f5bd4ef97b8fa19dc103d",
+    "identityHash": "bb955e12e4b32318b01b228066ebf60c",
     "entities": [
       {
         "tableName": "market_item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ath` REAL NOT NULL, `athChangePercentage` REAL NOT NULL, `athDate` TEXT, `atl` REAL NOT NULL, `atlChangePercentage` REAL NOT NULL, `atlDate` TEXT, `circulatingSupply` REAL NOT NULL, `currentPrice` REAL NOT NULL, `fullyDilutedValuation` REAL NOT NULL, `high24h` REAL NOT NULL, `id` TEXT NOT NULL, `image` TEXT NOT NULL, `lastUpdated` TEXT NOT NULL, `low24h` REAL NOT NULL, `marketCap` REAL NOT NULL, `marketCapChange24h` REAL NOT NULL, `marketCapChangePercentage24h` REAL NOT NULL, `marketCapRank` INTEGER NOT NULL, `maxSupply` REAL NOT NULL, `name` TEXT NOT NULL, `priceChange24h` REAL NOT NULL, `priceChangePercentage24h` REAL NOT NULL, `symbol` TEXT NOT NULL, `totalSupply` REAL NOT NULL, `totalVolume` REAL NOT NULL, `query` TEXT NOT NULL, `roi_currency` TEXT, `roi_percentage` REAL, `roi_times` REAL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ath` REAL NOT NULL, `athChangePercentage` REAL NOT NULL, `athDate` TEXT, `atl` REAL NOT NULL, `atlChangePercentage` REAL NOT NULL, `atlDate` TEXT, `circulatingSupply` REAL NOT NULL, `currentPrice` REAL NOT NULL, `fullyDilutedValuation` REAL NOT NULL, `high24h` REAL NOT NULL, `id` TEXT NOT NULL, `image` TEXT NOT NULL, `lastUpdated` TEXT, `low24h` REAL NOT NULL, `marketCap` REAL NOT NULL, `marketCapChange24h` REAL NOT NULL, `marketCapChangePercentage24h` REAL NOT NULL, `marketCapRank` INTEGER NOT NULL, `maxSupply` REAL NOT NULL, `name` TEXT NOT NULL, `priceChange24h` REAL NOT NULL, `priceChangePercentage24h` REAL NOT NULL, `symbol` TEXT NOT NULL, `totalSupply` REAL NOT NULL, `totalVolume` REAL NOT NULL, `query` TEXT NOT NULL, `roi_currency` TEXT, `roi_percentage` REAL, `roi_times` REAL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "ath",
@@ -84,7 +84,7 @@
             "fieldPath": "lastUpdated",
             "columnName": "lastUpdated",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "low24h",
@@ -196,7 +196,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '327ef6887a7f5bd4ef97b8fa19dc103d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bb955e12e4b32318b01b228066ebf60c')"
     ]
   }
 }
