@@ -1,8 +1,5 @@
 package com.bytecoders.coinscanner.ui.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
@@ -14,8 +11,6 @@ import com.bytecoders.coinscanner.repository.uistate.UiStateRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -28,16 +23,7 @@ class HomeViewModel @Inject constructor(
     private val uiStateRepository: UiStateRepository
 ) : ViewModel() {
 
-    val uiState by lazy { uiStateRepository.homeUiStateFlow.map {
-        _uiState = it
-        val marketConfiguration = CoinMarketConfiguration(
-            itemsPerPage = ITEMS_PER_PAGE,
-            currency = _uiState.currency.currencyCode.lowercase(),
-            order = _uiState.marketOrdering
-        )
-        coinGeckoRepository.updateConfiguration(marketConfiguration)
-        _uiState
-    } }
+    val uiState by lazy { uiStateRepository.homeUiStateFlow }
 
     private var _uiState: HomeUiState = HomeUiState()
 
@@ -57,6 +43,11 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateState(newUiState: HomeUiState) {
+        coinGeckoRepository.updateConfiguration( CoinMarketConfiguration(
+            itemsPerPage = ITEMS_PER_PAGE,
+            currency = newUiState.currency.currencyCode.lowercase(),
+            order = newUiState.marketOrdering
+        ))
         viewModelScope.launch {
             uiStateRepository.updateHomeUiState(newUiState)
         }
