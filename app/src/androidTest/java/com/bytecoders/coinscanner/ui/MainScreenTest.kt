@@ -3,7 +3,9 @@ package com.bytecoders.coinscanner.ui
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.bytecoders.coinscanner.MainActivity
+import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.currency.SEARCH_FIELD_TAG
+import com.bytecoders.coinscanner.ui.home.COIN_ITEM
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,16 +35,26 @@ class MainScreenTest {
     fun changeOrder() {
         // Change order
 
-        // Check that now Highest Market Cap is shown
-        composeTestRule.onNodeWithText("Lowest Market Cap").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Highest Market Cap").assertIsDisplayed().performClick()
+        val orderTypes = GeckoOrder.values()
 
-        // CLick on Lowest Market Cap from all options
-        composeTestRule.onNodeWithText("Lowest Market Cap").assertIsDisplayed().performClick()
+        for (i in 0..orderTypes.size - 2){
+            switchOrder(composeTestRule.activity.getString(orderTypes[i].description),
+                composeTestRule.activity.getString(orderTypes[i + 1].description))
+            waitCoinsLoaded()
+        }
+    }
 
-        // Check that now Lowest Market Cap is shown
-        composeTestRule.onNodeWithText("Highest Market Cap").assertDoesNotExist()
-        composeTestRule.onNodeWithText("Lowest Market Cap").assertIsDisplayed()
+    private fun switchOrder(fromOrder: String, toOrder: String) {
+        // Check that now fromOrder is shown
+        composeTestRule.onNodeWithText(toOrder).assertDoesNotExist()
+        composeTestRule.onNodeWithText(fromOrder).assertIsDisplayed().performClick()
+
+        // CLick on Lowest toOrder from all options
+        composeTestRule.onNodeWithText(toOrder).assertIsDisplayed().performClick()
+
+        // Check that now toOrder is shown
+        composeTestRule.onNodeWithText(fromOrder).assertDoesNotExist()
+        composeTestRule.onNodeWithText(toOrder).assertIsDisplayed()
     }
 
     @Test
@@ -55,8 +67,20 @@ class MainScreenTest {
 
         composeTestRule.onNodeWithText("euro", substring = true, ignoreCase = true).assertIsDisplayed().performClick()
 
+        waitCoinsLoaded()
         // Check all Chips again, now eur should be used
         composeTestRule.onNodeWithText("Highest Market Cap").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Euro").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Euro").assertIsDisplayed().performClick()
+
+        composeTestRule.onNodeWithText("AFN", substring = true, ignoreCase = true).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText("afghan", substring = true, ignoreCase = true).assertIsDisplayed()
+    }
+
+    private fun waitCoinsLoaded() {
+        composeTestRule.waitUntil(timeoutMillis = 2000) {
+            composeTestRule
+                .onAllNodesWithTag(COIN_ITEM)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
     }
 }
