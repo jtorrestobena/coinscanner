@@ -25,9 +25,14 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
+      - run:
+          name: Lint and Detekt
+          command: |
+            ./gradlew detekt lintRelease
+
       # The next step will run the unit tests
       - android/run-tests:
-          test-command: ./gradlew detekt lintRelease testDebug --continue
+          test-command: ./gradlew testDebug --continue
       - store_artifacts:
           path: app/build/reports
       - store_test_results:
