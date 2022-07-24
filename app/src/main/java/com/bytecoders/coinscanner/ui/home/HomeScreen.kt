@@ -65,6 +65,7 @@ private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
 private val coinContentPadding = PaddingValues(8.dp)
 private val coinArrangement = Arrangement.spacedBy(8.dp)
 
+const val COIN_LIST = "COIN_LIST"
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CoinList(
@@ -87,7 +88,8 @@ fun CoinList(
             contentPadding = coinContentPadding,
             verticalArrangement = coinArrangement,
             horizontalArrangement = coinArrangement,
-            state = rememberLazyGridState()
+            state = rememberLazyGridState(),
+            modifier = Modifier.testTag(COIN_LIST)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 LazyRow {

@@ -6,6 +6,8 @@ import com.bytecoders.coinscanner.MainActivity
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.currency.SEARCH_FIELD_TAG
 import com.bytecoders.coinscanner.ui.home.COIN_ITEM
+import com.bytecoders.coinscanner.ui.home.COIN_LIST
+import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
 import org.junit.Rule
 import org.junit.Test
 
@@ -40,7 +42,7 @@ class MainScreenTest {
         for (i in 0..orderTypes.size - 2){
             switchOrder(composeTestRule.activity.getString(orderTypes[i].description),
                 composeTestRule.activity.getString(orderTypes[i + 1].description))
-            waitCoinsLoaded()
+            verifyCoinsLoaded()
         }
     }
 
@@ -67,7 +69,7 @@ class MainScreenTest {
 
         composeTestRule.onNodeWithText("euro", substring = true, ignoreCase = true).assertIsDisplayed().performClick()
 
-        waitCoinsLoaded()
+        verifyCoinsLoaded()
         // Check all Chips again, now eur should be used
         composeTestRule.onNodeWithText("Highest Market Cap").assertIsDisplayed()
         composeTestRule.onNodeWithText("Euro").assertIsDisplayed().performClick()
@@ -76,11 +78,12 @@ class MainScreenTest {
         composeTestRule.onNodeWithText("afghan", substring = true, ignoreCase = true).assertIsDisplayed()
     }
 
-    private fun waitCoinsLoaded() {
+    private fun verifyCoinsLoaded() {
         composeTestRule.waitUntil(timeoutMillis = 2000) {
             composeTestRule
                 .onAllNodesWithTag(COIN_ITEM)
                 .fetchSemanticsNodes().isNotEmpty()
         }
+        composeTestRule.onNodeWithTag(COIN_LIST).performScrollToIndex(ITEMS_PER_PAGE).performScrollToIndex(0)
     }
 }
