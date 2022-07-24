@@ -24,7 +24,6 @@
     <ID>FunctionNaming:NavigationGraph.kt$@Composable fun NavigationGraph(navController: NavHostController, bottomPadding: Dp)</ID>
     <ID>FunctionNaming:PortfolioScreen.kt$@Composable fun PortfolioScreen(viewModel: PortfolioViewModel)</ID>
     <ID>FunctionNaming:Shimmer.kt$@Composable @Preview(showBackground = true) fun ShimmerPreview()</ID>
-    <ID>FunctionNaming:Shimmer.kt$@Composable fun BrushColors(): List&lt;Color></ID>
     <ID>FunctionNaming:Shimmer.kt$@Composable fun LoadingShimmerEffect()</ID>
     <ID>FunctionNaming:Shimmer.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ShimmerGridItem(brush: Brush)</ID>
     <ID>LongMethod:CurrencySelectionScreen.kt$ @Composable fun SearchTextField( query: TextFieldValue, onQueryChange: (TextFieldValue) -> Unit, onSearchFocusChange: (Boolean) -> Unit, onClearQuery: () -> Unit, searching: Boolean, focused: Boolean, modifier: Modifier = Modifier )</ID>
@@ -80,7 +79,7 @@
     <ID>MagicNumber:Shimmer.kt$200f</ID>
     <ID>MatchingDeclarationName:WindowSizeClass.kt$WindowSize</ID>
     <ID>MaxLineLength:CurrencySelectionScreen.kt$style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary)</ID>
-    <ID>MaximumLineLength:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:107</ID>
+    <ID>MaximumLineLength:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:108</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:18</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:19</ID>
     <ID>NoWildcardImports:com.bytecoders.coinscanner.ui.currency.CurrencySelectionScreen.kt:6</ID>
