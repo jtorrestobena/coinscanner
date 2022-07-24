@@ -5,9 +5,9 @@ import com.bytecoders.coinscanner.data.database.AppDatabase
 import com.bytecoders.coinscanner.data.database.UiStateDao
 import com.bytecoders.coinscanner.data.state.HomeUiState
 import com.bytecoders.coinscanner.repository.uistate.UiStateRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UiStateRepositoryImpl @Inject constructor(

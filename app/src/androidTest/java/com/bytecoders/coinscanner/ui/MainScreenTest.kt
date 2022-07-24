@@ -39,10 +39,11 @@ class MainScreenTest {
 
         val orderTypes = GeckoOrder.values()
 
-        for (i in 0..orderTypes.size - 2){
-            switchOrder(composeTestRule.activity.getString(orderTypes[i].description),
-                composeTestRule.activity.getString(orderTypes[i + 1].description))
-            verifyCoinsLoaded()
+        for (i in 0..orderTypes.size - 2) {
+            switchOrder(
+                composeTestRule.activity.getString(orderTypes[i].description),
+                composeTestRule.activity.getString(orderTypes[i + 1].description)
+            )
         }
     }
 
@@ -67,15 +68,18 @@ class MainScreenTest {
         composeTestRule.onNodeWithTag(SEARCH_FIELD_TAG).assertIsDisplayed().performTextInput("eur")
         composeTestRule.onNodeWithTag(SEARCH_FIELD_TAG).assert(hasText("eur"))
 
-        composeTestRule.onNodeWithText("euro", substring = true, ignoreCase = true).assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText("euro", substring = true, ignoreCase = true)
+            .assertIsDisplayed().performClick()
 
         verifyCoinsLoaded()
         // Check all Chips again, now eur should be used
         composeTestRule.onNodeWithText("Highest Market Cap").assertIsDisplayed()
         composeTestRule.onNodeWithText("Euro").assertIsDisplayed().performClick()
 
-        composeTestRule.onNodeWithText("AFN", substring = true, ignoreCase = true).assertIsDisplayed().performClick()
-        composeTestRule.onNodeWithText("afghan", substring = true, ignoreCase = true).assertIsDisplayed()
+        composeTestRule.onNodeWithText("AFN", substring = true, ignoreCase = true)
+            .assertIsDisplayed().performClick()
+        composeTestRule.onNodeWithText("afghan", substring = true, ignoreCase = true)
+            .assertIsDisplayed()
     }
 
     private fun verifyCoinsLoaded() {
@@ -84,6 +88,7 @@ class MainScreenTest {
                 .onAllNodesWithTag(COIN_ITEM)
                 .fetchSemanticsNodes().isNotEmpty()
         }
-        composeTestRule.onNodeWithTag(COIN_LIST).performScrollToIndex(ITEMS_PER_PAGE).performScrollToIndex(0)
+        composeTestRule.onNodeWithTag(COIN_LIST).performScrollToIndex(ITEMS_PER_PAGE)
+            .performScrollToIndex(0)
     }
 }

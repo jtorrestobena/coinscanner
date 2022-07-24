@@ -23,5 +23,4 @@ class Converters {
     fun currencyToString(currency: Currency?): String? {
         return currency?.currencyCode
     }
-
 }
