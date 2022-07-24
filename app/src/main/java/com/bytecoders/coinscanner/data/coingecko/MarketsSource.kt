@@ -24,7 +24,7 @@ class MarketsSource(
     private val currencyService: CurrencyService,
     private val appDatabase: AppDatabase,
     private val marketItemsDao: MarketItemsDao,
-    var coinMarketConfiguration: CoinMarketConfiguration
+    var coinMarketConfig: CoinMarketConfiguration? = null
 ) : RemoteMediator<Int, MarketItem>() {
 
     private var currentPage = INITIAL_PAGE
@@ -34,6 +34,9 @@ class MarketsSource(
         loadType: LoadType,
         state: PagingState<Int, MarketItem>
     ): MediatorResult {
+        val coinMarketConfiguration =
+            coinMarketConfig ?: return MediatorResult.Success(endOfPaginationReached = true)
+
         return try {
             when (loadType) {
                 LoadType.REFRESH -> {
@@ -48,7 +51,7 @@ class MarketsSource(
 
             val markets = try {
                 if (currencyCache.containsKey(coinMarketConfiguration.currency)) {
-                    performCurrencyConversion()
+                    performCurrencyConversion(coinMarketConfiguration)
                 } else {
                     geckoService.getMarkets(
                         page = currentPage,
@@ -59,7 +62,7 @@ class MarketsSource(
                 }
             } catch (e: HttpException) {
                 if (e.code() != BAD_REQUEST) throw e
-                performCurrencyConversion()
+                performCurrencyConversion(coinMarketConfiguration)
             }
 
             appDatabase.withTransaction {
@@ -80,7 +83,7 @@ class MarketsSource(
         }
     }
 
-    private suspend fun performCurrencyConversion(): List<MarketItem> {
+    private suspend fun performCurrencyConversion(coinMarketConfiguration: CoinMarketConfiguration): List<MarketItem> {
         val currencyConversion: CurrencyConversion =
             currencyCache[coinMarketConfiguration.currency]
                 ?: currencyService.convertCurrency(targetCurrency = coinMarketConfiguration.currency)

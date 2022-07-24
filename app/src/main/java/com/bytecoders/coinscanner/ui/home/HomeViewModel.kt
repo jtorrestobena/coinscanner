@@ -29,36 +29,31 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState by lazy { uiStateRepository.homeUiStateFlow.map {
-        marketConfiguration = CoinMarketConfiguration(
+        _uiState = it
+        val marketConfiguration = CoinMarketConfiguration(
             itemsPerPage = ITEMS_PER_PAGE,
-            currency = it.currency.currencyCode.lowercase(),
-            order = it.marketOrdering
+            currency = _uiState.currency.currencyCode.lowercase(),
+            order = _uiState.marketOrdering
         )
         coinGeckoRepository.updateConfiguration(marketConfiguration)
-        it
+        _uiState
     } }
 
-    private var marketConfiguration: CoinMarketConfiguration = CoinMarketConfiguration(
-            itemsPerPage = ITEMS_PER_PAGE,
-            currency = uiStateRepository.homeUiState.currency.currencyCode.lowercase(),
-            order = uiStateRepository.homeUiState.marketOrdering
-        )
+    private var _uiState: HomeUiState = HomeUiState()
 
     @OptIn(ExperimentalPagingApi::class)
     val markets: Flow<PagingData<MarketItem>> = Pager(
         config = PagingConfig(pageSize = ITEMS_PER_PAGE),
-        remoteMediator = coinGeckoRepository.getMarkets(marketConfiguration),
-        pagingSourceFactory = { coinGeckoRepository.pagingSource(marketConfiguration) }
+        remoteMediator = coinGeckoRepository.markets,
+        pagingSourceFactory = { coinGeckoRepository.pagingSource }
     ).flow.cachedIn(viewModelScope)
 
     fun changeOrder(newOrdering: GeckoOrder) {
-        updateState(uiStateRepository.homeUiState.copy(marketOrdering = newOrdering))
-        //coinGeckoRepository.updateConfiguration(marketConfiguration)
+        updateState(_uiState.copy(marketOrdering = newOrdering))
     }
 
     fun changeCurrency(newCurrency: Currency) {
-        updateState(uiStateRepository.homeUiState.copy(currency = newCurrency))
-        //coinGeckoRepository.updateConfiguration(marketConfiguration)
+        updateState(_uiState.copy(currency = newCurrency))
     }
 
     private fun updateState(newUiState: HomeUiState) {

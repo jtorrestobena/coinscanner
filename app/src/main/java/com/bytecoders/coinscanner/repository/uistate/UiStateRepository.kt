@@ -6,7 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface UiStateRepository {
     val homeUiStateFlow: Flow<HomeUiState>
 
-    val homeUiState: HomeUiState
-
     suspend fun updateHomeUiState(newUiState: HomeUiState)
 }

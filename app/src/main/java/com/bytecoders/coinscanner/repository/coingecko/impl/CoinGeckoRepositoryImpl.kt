@@ -12,30 +12,24 @@ import com.bytecoders.coinscanner.service.currency.CurrencyService
 import javax.inject.Inject
 
 class CoinGeckoRepositoryImpl @Inject constructor(
-    private val geckoService: CoinGeckoService,
-    private val currencyService: CurrencyService,
-    private val appDatabase: AppDatabase,
+    geckoService: CoinGeckoService,
+    currencyService: CurrencyService,
+    appDatabase: AppDatabase,
     private val marketItemsDao: MarketItemsDao
 ) :
     CoinGeckoRepository {
-    private var marketsSource: MarketsSource? = null
 
-    override fun getMarkets(configuration: CoinMarketConfiguration): MarketsSource {
-        return MarketsSource(
-            geckoService,
-            currencyService,
-            appDatabase,
-            marketItemsDao,
-            configuration
-        ).apply {
-            marketsSource = this
-        }
-    }
+    override val markets: MarketsSource = MarketsSource(
+        geckoService,
+        currencyService,
+        appDatabase,
+        marketItemsDao
+    )
 
-    override fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem> =
-        marketItemsDao.sourceForQuery(marketConfiguration.query)
+    override val pagingSource: PagingSource<Int, MarketItem>
+        get() = marketItemsDao.sourceForQuery(markets.coinMarketConfig?.query.orEmpty())
 
     override fun updateConfiguration(newConfiguration: CoinMarketConfiguration) {
-        marketsSource?.coinMarketConfiguration = newConfiguration
+        markets.coinMarketConfig = newConfiguration
     }
 }

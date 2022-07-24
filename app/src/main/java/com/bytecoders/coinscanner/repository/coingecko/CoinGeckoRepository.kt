@@ -6,11 +6,9 @@ import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 
 interface CoinGeckoRepository {
 
-    fun getMarkets(
-        configuration: CoinMarketConfiguration
-    ): MarketsSource
+    val markets: MarketsSource
 
-    fun pagingSource(marketConfiguration: CoinMarketConfiguration): PagingSource<Int, MarketItem>
+    val pagingSource: PagingSource<Int, MarketItem>
 
     fun updateConfiguration(newConfiguration: CoinMarketConfiguration)
 }
