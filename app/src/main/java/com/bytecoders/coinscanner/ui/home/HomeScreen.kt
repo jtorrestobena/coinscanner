@@ -5,7 +5,10 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
@@ -15,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +33,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ellipsis
@@ -38,7 +44,6 @@ import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
 import com.bytecoders.coinscanner.ui.navigation.RouteCurrencySelection
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.bytecoders.coinscanner.ui.theme.priceChangeColor
-import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
@@ -194,9 +199,11 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
                 .padding(16.dp)
         ) {
             val (coinImage, coinName, coinPrice, coinTicker, coinChange) = createRefs()
-            val image = rememberCoilPainter(
-                request = coin.image,
-                fadeIn = true
+            val image = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(coin.image)
+                    .crossfade(true)
+                    .build()
             )
             Image(
                 painter = image,
