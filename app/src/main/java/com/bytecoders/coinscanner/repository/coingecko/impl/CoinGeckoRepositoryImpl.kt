@@ -19,6 +19,8 @@ class CoinGeckoRepositoryImpl @Inject constructor(
 ) :
     CoinGeckoRepository {
 
+    private var marketConfiguration = CoinMarketConfiguration()
+
     override val markets: MarketsSource = MarketsSource(
         geckoService,
         currencyService,
@@ -27,9 +29,10 @@ class CoinGeckoRepositoryImpl @Inject constructor(
     )
 
     override val pagingSource: PagingSource<Int, MarketItem>
-        get() = marketItemsDao.sourceForQuery(markets.coinMarketConfig?.query.orEmpty())
+        get() = marketItemsDao.sourceForQuery(marketConfiguration.query)
 
     override fun updateConfiguration(newConfiguration: CoinMarketConfiguration) {
         markets.coinMarketConfig = newConfiguration
+        marketConfiguration = newConfiguration
     }
 }
