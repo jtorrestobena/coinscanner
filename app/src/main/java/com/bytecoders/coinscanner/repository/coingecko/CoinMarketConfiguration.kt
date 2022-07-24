@@ -1,4 +1,4 @@
-package com.bytecoders.coinscanner.repository
+package com.bytecoders.coinscanner.repository.coingecko
 
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 

@@ -1,7 +1,7 @@
 package com.bytecoders.coinscanner.service.currency
 
 import com.bytecoders.coinscanner.data.currency.CurrencyConversion
-import com.bytecoders.coinscanner.repository.DEFAULT_CURRENCY
+import com.bytecoders.coinscanner.repository.coingecko.DEFAULT_CURRENCY
 import retrofit2.http.GET
 import retrofit2.http.Query
 

@@ -1,12 +1,12 @@
-package com.bytecoders.coinscanner.repository.impl
+package com.bytecoders.coinscanner.repository.coingecko.impl
 
 import androidx.paging.PagingSource
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 import com.bytecoders.coinscanner.data.database.AppDatabase
 import com.bytecoders.coinscanner.data.database.MarketItemsDao
-import com.bytecoders.coinscanner.repository.CoinGeckoRepository
-import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
+import com.bytecoders.coinscanner.repository.coingecko.CoinGeckoRepository
+import com.bytecoders.coinscanner.repository.coingecko.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.currency.CurrencyService
 import javax.inject.Inject

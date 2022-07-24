@@ -1,7 +1,9 @@
 package com.bytecoders.coinscanner.di.modules
 
-import com.bytecoders.coinscanner.repository.CoinGeckoRepository
-import com.bytecoders.coinscanner.repository.impl.CoinGeckoRepositoryImpl
+import com.bytecoders.coinscanner.repository.coingecko.CoinGeckoRepository
+import com.bytecoders.coinscanner.repository.coingecko.impl.CoinGeckoRepositoryImpl
+import com.bytecoders.coinscanner.repository.uistate.UiStateRepository
+import com.bytecoders.coinscanner.repository.uistate.impl.UiStateRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,4 +17,9 @@ interface RepositoryModule {
     fun bindCoinGeckoRepository(
         coinGeckoRepositoryImpl: CoinGeckoRepositoryImpl
     ): CoinGeckoRepository
+
+    @Binds
+    fun bindUiStateRepository(
+        uiStateRepositoryImpl: UiStateRepositoryImpl
+    ): UiStateRepository
 }

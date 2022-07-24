@@ -3,12 +3,11 @@ package com.bytecoders.coinscanner.service
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.data.coingecko.INITIAL_PAGE
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
-import com.bytecoders.coinscanner.repository.DEFAULT_CURRENCY
+import com.bytecoders.coinscanner.repository.coingecko.DEFAULT_CURRENCY
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.service.currency.CurrencyService
 import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
-import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test

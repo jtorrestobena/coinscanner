@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -37,6 +40,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
+import com.bytecoders.coinscanner.data.state.HomeUiState
 import com.bytecoders.coinscanner.ellipsis
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
@@ -52,18 +56,26 @@ import kotlin.random.Random
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
-    CoinList(
-        coins = viewModel.markets,
-        currency = viewModel.uiState.currency,
-        isRefreshing = viewModel.uiState.isRefreshing,
-        onSortChanged = { viewModel.changeOrder(it) },
-        selectedOrder = viewModel.uiState.marketOrdering,
-        onCurrencyClicked = {
-            navController.navigate(RouteCurrencySelection) {
-                launchSingleTop = true
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val uiStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
+        viewModel.uiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+    }
+
+    val uiState = uiStateFlowLifecycleAware.collectAsState(initial = HomeUiState())
+    if (!uiState.value.stale) {
+        CoinList(
+            coins = viewModel.markets,
+            currency = uiState.value.currency,
+            isRefreshing = uiState.value.isRefreshing,
+            onSortChanged = { viewModel.changeOrder(it) },
+            selectedOrder = uiState.value.marketOrdering,
+            onCurrencyClicked = {
+                navController.navigate(RouteCurrencySelection) {
+                    launchSingleTop = true
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 private val coinColumns = GridCells.Adaptive(minSize = 300.dp)
