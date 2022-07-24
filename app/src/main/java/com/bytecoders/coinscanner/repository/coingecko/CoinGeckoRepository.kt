@@ -1,4 +1,4 @@
-package com.bytecoders.coinscanner.repository
+package com.bytecoders.coinscanner.repository.coingecko
 
 import androidx.paging.PagingSource
 import com.bytecoders.coinscanner.data.coingecko.MarketItem

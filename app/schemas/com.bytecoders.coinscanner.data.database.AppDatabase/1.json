@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "52884e3b3c4308598956c379ea542365",
+    "identityHash": "ea9016293d7da7d0ad390474eb6ec23f",
     "entities": [
       {
         "tableName": "market_item",
@@ -191,12 +191,56 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "home_ui_state",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `marketOrdering` TEXT NOT NULL, `currency` TEXT NOT NULL, `isRefreshing` INTEGER NOT NULL, `stale` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketOrdering",
+            "columnName": "marketOrdering",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRefreshing",
+            "columnName": "isRefreshing",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stale",
+            "columnName": "stale",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '52884e3b3c4308598956c379ea542365')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ea9016293d7da7d0ad390474eb6ec23f')"
     ]
   }
 }

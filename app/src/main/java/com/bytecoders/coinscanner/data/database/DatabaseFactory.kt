@@ -22,4 +22,7 @@ object DatabaseFactory {
 
     @Provides
     fun provideMarketItemsDao(db: AppDatabase): MarketItemsDao = db.marketsDao()
+
+    @Provides
+    fun provideUiStateDao(db: AppDatabase): UiStateDao = db.uiStateDao()
 }

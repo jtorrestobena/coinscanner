@@ -1,51 +1,47 @@
 package com.bytecoders.coinscanner.ui.home
 
-import android.os.Parcelable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.*
-import androidx.versionedparcelable.ParcelField
-import androidx.versionedparcelable.VersionedParcelize
-import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
-import com.bytecoders.coinscanner.repository.CoinGeckoRepository
-import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
+import com.bytecoders.coinscanner.data.state.HomeUiState
+import com.bytecoders.coinscanner.repository.coingecko.CoinGeckoRepository
+import com.bytecoders.coinscanner.repository.coingecko.CoinMarketConfiguration
+import com.bytecoders.coinscanner.repository.uistate.UiStateRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.parcelize.Parcelize
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
 const val ITEMS_PER_PAGE = 50
 
-private const val HOME_UI_STATE = "HOME_UI_STATE"
-
-@Parcelize
-data class HomeUiState(
-    val marketOrdering: GeckoOrder = GeckoOrder.MARKET_CAP_DESC,
-    val currency: Currency = CurrencyManager.getDefaultCurrency(),
-    val isRefreshing: Boolean = false
-): Parcelable
-
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val coinGeckoRepository: CoinGeckoRepository,
-    private val savedStateHandle: SavedStateHandle,
+    private val uiStateRepository: UiStateRepository
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(savedStateHandle[HOME_UI_STATE] ?: HomeUiState())
-        private set
-
-    private val marketConfiguration: CoinMarketConfiguration
-        get() = CoinMarketConfiguration(
+    val uiState by lazy { uiStateRepository.homeUiStateFlow.map {
+        marketConfiguration = CoinMarketConfiguration(
             itemsPerPage = ITEMS_PER_PAGE,
-            currency = uiState.currency.currencyCode.lowercase(),
-            order = uiState.marketOrdering
+            currency = it.currency.currencyCode.lowercase(),
+            order = it.marketOrdering
+        )
+        coinGeckoRepository.updateConfiguration(marketConfiguration)
+        it
+    } }
+
+    private var marketConfiguration: CoinMarketConfiguration = CoinMarketConfiguration(
+            itemsPerPage = ITEMS_PER_PAGE,
+            currency = uiStateRepository.homeUiState.currency.currencyCode.lowercase(),
+            order = uiStateRepository.homeUiState.marketOrdering
         )
 
     @OptIn(ExperimentalPagingApi::class)
@@ -56,17 +52,18 @@ class HomeViewModel @Inject constructor(
     ).flow.cachedIn(viewModelScope)
 
     fun changeOrder(newOrdering: GeckoOrder) {
-        updateState(uiState.copy(marketOrdering = newOrdering))
-        coinGeckoRepository.updateConfiguration(marketConfiguration)
+        updateState(uiStateRepository.homeUiState.copy(marketOrdering = newOrdering))
+        //coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 
     fun changeCurrency(newCurrency: Currency) {
-        updateState(uiState.copy(currency = newCurrency))
-        coinGeckoRepository.updateConfiguration(marketConfiguration)
+        updateState(uiStateRepository.homeUiState.copy(currency = newCurrency))
+        //coinGeckoRepository.updateConfiguration(marketConfiguration)
     }
 
     private fun updateState(newUiState: HomeUiState) {
-        uiState = newUiState
-        savedStateHandle[HOME_UI_STATE] = newUiState
+        viewModelScope.launch {
+            uiStateRepository.updateHomeUiState(newUiState)
+        }
     }
 }

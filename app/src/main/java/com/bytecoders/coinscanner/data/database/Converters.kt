@@ -11,6 +11,17 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+        return date?.time
     }
+
+    @TypeConverter
+    fun fromString(value: String?): Currency? {
+        return value?.let { Currency.getInstance(value) }
+    }
+
+    @TypeConverter
+    fun currencyToString(currency: Currency?): String? {
+        return currency?.currencyCode
+    }
+
 }

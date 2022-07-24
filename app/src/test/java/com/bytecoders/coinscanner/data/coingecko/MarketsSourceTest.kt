@@ -5,7 +5,7 @@ import androidx.room.withTransaction
 import com.bytecoders.coinscanner.data.DataUtil
 import com.bytecoders.coinscanner.data.database.AppDatabase
 import com.bytecoders.coinscanner.data.database.MarketItemsDao
-import com.bytecoders.coinscanner.repository.CoinMarketConfiguration
+import com.bytecoders.coinscanner.repository.coingecko.CoinMarketConfiguration
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.currency.CurrencyService
 import io.mockk.MockKAnnotations
