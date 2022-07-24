@@ -1,5 +1,6 @@
 package com.bytecoders.coinscanner.service
 
+import com.bytecoders.coinscanner.BuildConfig.RAPID_API_KEY
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.converter.EnumConverterFactory
 import com.bytecoders.coinscanner.service.currency.CurrencyService
@@ -15,7 +16,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(ViewModelComponent::class)
 object ServiceFactory {
-    private const val RAPID_API_KEY = "9dca701489msha60ad7038f0b5fap150af9jsnd6101dc279bf"
 
     @Provides
     fun provideCoinGeckoService(): CoinGeckoService {
