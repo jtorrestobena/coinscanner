@@ -2,6 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>ReturnCount:MarketsSource.kt$MarketsSource$override suspend fun load( loadType: LoadType, state: PagingState&lt;Int, MarketItem> ): MediatorResult</ID>
     <ID>SwallowedException:CurrencyManager.kt$CurrencyManager$e: Exception</ID>
     <ID>SwallowedException:EnumConverterFactory.kt$EnumConverterFactory$exception: Exception</ID>
     <ID>TooGenericExceptionCaught:CurrencyManager.kt$CurrencyManager$e: Exception</ID>

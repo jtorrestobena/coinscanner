@@ -1,7 +1,6 @@
 package com.bytecoders.coinscanner.data.state
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
