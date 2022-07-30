@@ -82,6 +82,7 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
             state.searchResults = CurrencyManager.getCurrencyList().filter {
                 state.query.text.isEmpty() || it.displayTitle().contains(state.query.text, true)
             }
+            state.suggestions = CurrencyManager.getCurrencyList().filter { state.query.text.contains(it.currencyCode, ignoreCase = true) }
             state.searching = false
         }
 
@@ -132,6 +133,18 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
             }
 
             SearchDisplay.Suggestions -> {
+                Text(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .wrapContentSize(Alignment.Center),
+                    text = stringResource(
+                        id = R.string.did_you_mean,
+                        state.suggestions.joinToString(" ")
+                    ),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.headlineSmall.copy(color = MaterialTheme.colorScheme.primary),
+                )
             }
         }
     }
@@ -166,9 +179,9 @@ class SearchState(
     val searchDisplay: SearchDisplay
         get() = when {
             !focused && query.text.isEmpty() -> SearchDisplay.InitialResults
-            focused && query.text.isEmpty() -> SearchDisplay.Suggestions
-            searchResults.isEmpty() -> SearchDisplay.NoResults
-            else -> SearchDisplay.Results
+            searchResults.isNotEmpty() -> SearchDisplay.Results
+            suggestions.isNotEmpty() -> SearchDisplay.Suggestions
+            else -> SearchDisplay.NoResults
         }
 
     override fun toString(): String {

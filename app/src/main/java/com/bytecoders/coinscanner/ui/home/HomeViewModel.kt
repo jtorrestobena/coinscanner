@@ -13,6 +13,7 @@ import com.bytecoders.coinscanner.repository.uistate.UiStateRepository
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -23,7 +24,11 @@ class HomeViewModel @Inject constructor(
     private val uiStateRepository: UiStateRepository
 ) : ViewModel() {
 
-    val uiState by lazy { uiStateRepository.homeUiStateFlow }
+    val uiState by lazy {
+        uiStateRepository.homeUiStateFlow.map {
+            it.apply { updateState(this) }
+        }
+    }
 
     private var _uiState: HomeUiState = HomeUiState()
 
