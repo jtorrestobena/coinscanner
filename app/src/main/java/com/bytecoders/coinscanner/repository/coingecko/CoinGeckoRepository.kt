@@ -1,14 +1,14 @@
 package com.bytecoders.coinscanner.repository.coingecko
 
-import androidx.paging.PagingSource
+import androidx.paging.PagingData
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
-import com.bytecoders.coinscanner.data.coingecko.MarketsSource
+import kotlinx.coroutines.flow.Flow
+
+const val ITEMS_PER_PAGE = 50
 
 interface CoinGeckoRepository {
 
-    val markets: MarketsSource
-
-    val pagingSource: PagingSource<Int, MarketItem>
+    val markets: Flow<PagingData<MarketItem>>
 
     fun updateConfiguration(newConfiguration: CoinMarketConfiguration)
 }
