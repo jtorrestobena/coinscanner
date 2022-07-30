@@ -3,11 +3,11 @@ package com.bytecoders.coinscanner.ui
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import com.bytecoders.coinscanner.MainActivity
+import com.bytecoders.coinscanner.repository.coingecko.ITEMS_PER_PAGE
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.currency.SEARCH_FIELD_TAG
 import com.bytecoders.coinscanner.ui.home.COIN_ITEM
 import com.bytecoders.coinscanner.ui.home.COIN_LIST
-import com.bytecoders.coinscanner.ui.home.ITEMS_PER_PAGE
 import org.junit.Rule
 import org.junit.Test
 
