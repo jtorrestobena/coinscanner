@@ -1,14 +1,19 @@
 package com.bytecoders.coinscanner.repository.coingecko.impl
 
-import androidx.paging.PagingSource
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.data.coingecko.MarketsSource
 import com.bytecoders.coinscanner.data.database.AppDatabase
 import com.bytecoders.coinscanner.data.database.MarketItemsDao
 import com.bytecoders.coinscanner.repository.coingecko.CoinGeckoRepository
 import com.bytecoders.coinscanner.repository.coingecko.CoinMarketConfiguration
+import com.bytecoders.coinscanner.repository.coingecko.ITEMS_PER_PAGE
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.currency.CurrencyService
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CoinGeckoRepositoryImpl @Inject constructor(
@@ -21,18 +26,22 @@ class CoinGeckoRepositoryImpl @Inject constructor(
 
     private var marketConfiguration = CoinMarketConfiguration()
 
-    override val markets: MarketsSource = MarketsSource(
+    private val marketsSource: MarketsSource = MarketsSource(
         geckoService,
         currencyService,
         appDatabase,
         marketItemsDao
     )
 
-    override val pagingSource: PagingSource<Int, MarketItem>
-        get() = marketItemsDao.sourceForQuery(marketConfiguration.query)
+    @OptIn(ExperimentalPagingApi::class)
+    override val markets: Flow<PagingData<MarketItem>> = Pager(
+        config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+        remoteMediator = marketsSource,
+        pagingSourceFactory = { marketItemsDao.sourceForQuery(marketConfiguration.query) }
+    ).flow
 
     override fun updateConfiguration(newConfiguration: CoinMarketConfiguration) {
-        markets.coinMarketConfig = newConfiguration
+        marketsSource.coinMarketConfig = newConfiguration
         marketConfiguration = newConfiguration
     }
 }
