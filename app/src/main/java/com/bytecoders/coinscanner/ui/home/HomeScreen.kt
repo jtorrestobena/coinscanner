@@ -36,8 +36,9 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
+import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.data.state.HomeUiState
@@ -147,7 +148,7 @@ fun CoinList(
             }) { index ->
                 val coin = coinsItems[index]
                 coin?.let {
-                    CoinItem(it, currency.currencyCode.lowercase(), Modifier.animateItemPlacement())
+                    CoinItem(it, currency.currencyCode.lowercase(), Modifier.animateItem())
                 }
             }
 
