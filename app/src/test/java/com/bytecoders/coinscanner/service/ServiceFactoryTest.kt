@@ -10,11 +10,13 @@ import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.service.currency.CurrencyService
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 
 private const val TEST_NUM_PAGES = 10
 class ServiceFactoryTest {
 
+    @Ignore("Integration test requiring network connectivity and API access")
     @Test
     fun `test pagination on gecko service has unique coin ids`() {
         val geckoService: CoinGeckoService = ServiceFactory.provideCoinGeckoService()
@@ -29,6 +31,7 @@ class ServiceFactoryTest {
         }
     }
 
+    @Ignore("Integration test requiring network connectivity and API access")
     @Test
     fun `test currency conversion`() {
         val currencyService: CurrencyService = ServiceFactory.provideCurrencyService()
