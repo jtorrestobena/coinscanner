@@ -27,13 +27,29 @@ jobs:
       # Checkout the code as the first step.
       - checkout
 
-      # Set Android SDK environment variable
+      # Install Android SDK command line tools
       - run:
-          name: Set ANDROID_HOME
+          name: Install Android SDK
           command: |
-            echo 'export ANDROID_HOME=/opt/android/sdk' >> $BASH_ENV
-            echo 'export ANDROID_SDK_ROOT=/opt/android/sdk' >> $BASH_ENV
+            # Create SDK directory
+            mkdir -p $HOME/android-sdk
+            cd $HOME/android-sdk
+
+            # Download and install command line tools
+            wget -q https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+            unzip -q commandlinetools-linux-11076708_latest.zip
+            mkdir -p cmdline-tools/latest
+            mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
+
+            # Set environment variables
+            echo 'export ANDROID_HOME=$HOME/android-sdk' >> $BASH_ENV
+            echo 'export ANDROID_SDK_ROOT=$HOME/android-sdk' >> $BASH_ENV
+            echo 'export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH' >> $BASH_ENV
             source $BASH_ENV
+
+            # Accept licenses and install required SDK components
+            yes | sdkmanager --licenses || true
+            sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       # Restore Android SDK dependencies
       - android/restore-gradle-cache
