@@ -2,38 +2,28 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
-    id("dagger.hilt.android.plugin")
-    id("io.gitlab.arturbosch.detekt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.detekt)
 }
 
-val kotlin_version: String by rootProject.extra
-val hilt_version: String by rootProject.extra
-val mockk_version: String by rootProject.extra
-val detekt_version: String by rootProject.extra
-
 android {
-    compileSdk = 33
+    compileSdk = 36
     namespace = "com.bytecoders.coinscanner"
 
     defaultConfig {
         applicationId = "com.bytecoders.coinscanner"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 23
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
-            }
-        }
 
         buildConfigField("String", "RAPID_API_KEY", "\"${System.getenv("RAPID_API_KEY")}\"")
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
@@ -67,6 +57,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
@@ -74,79 +68,75 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    //noinspection GradleDependency (coupling with Compose Compiler)
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+    implementation(libs.kotlin.stdlib)
 
-    implementation("com.google.dagger:hilt-android:$hilt_version")
-    kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
-    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("androidx.compose.ui:ui:1.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.ui)
     // Tooling support (Previews, etc.)
-    implementation("androidx.compose.ui:ui-tooling:1.2.0")
+    implementation(libs.androidx.compose.ui.tooling)
     // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation("androidx.compose.foundation:foundation:1.2.0")
+    implementation(libs.androidx.compose.foundation)
     // Material Design
-    implementation("androidx.compose.material:material:1.2.0")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha14")
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.window.size)
     // Integration with activities
-    implementation("androidx.activity:activity-compose:1.5.1")
+    implementation(libs.androidx.activity.compose)
     // Integration with ViewModels
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     // Hilt navigation
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.androidx.hilt.navigation.compose)
     // Responsive UI
-    implementation("androidx.window:window:1.1.0-alpha03")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-alpha14")
+    implementation(libs.androidx.window)
     // Coil for compose
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation(libs.coil.compose)
 
-    implementation("androidx.navigation:navigation-compose:2.5.0")
-    implementation("androidx.paging:paging-compose:1.0.0-alpha15")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha03")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.9")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.9")
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
 
-    val coroutines_version = "1.6.4"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
+    implementation(libs.kotlinx.coroutines.android)
 
-    val accompanist_version = "0.26.0-alpha"
-    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanist_version")
+    implementation(libs.accompanist.swiperefresh)
+    implementation(libs.accompanist.systemuicontroller)
 
     // Room
-    val room_version = "2.4.2"
-    implementation("androidx.room:room-runtime:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
 
     // Unit tests
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
-    testImplementation("io.mockk:mockk:$mockk_version")
-    testImplementation("io.mockk:mockk-agent-jvm:$mockk_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent)
+    testImplementation(libs.kotlin.test)
 
     // UI Tests
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.0")
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestUtil("androidx.test:orchestrator:1.4.1")
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestUtil(libs.androidx.test.orchestrator)
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version")
+    detektPlugins(libs.detekt.formatting)
 }
 
 detekt {
     autoCorrect = true
-    toolVersion = detekt_version
-    input.setFrom(files("src/main/java/"))
+    toolVersion = libs.versions.detekt.get()
+    source.setFrom(files("src/main/java/"))
     config.setFrom(files("../ci/detekt-config.yml"))
     baseline = file("detekt-baseline.xml")
     buildUponDefaultConfig = true
