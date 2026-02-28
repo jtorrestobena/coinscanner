@@ -19,7 +19,6 @@ jobs:
     executor:
       name: android/android-machine
       resource-class: large
-      tag: 2024.01.2
 
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
