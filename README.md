@@ -39,7 +39,7 @@ com.bytecoders.coinscanner
 │   ├── portfolio # User's assets
 │   ├── navigation# Navigation graph and items
 │   └── theme     # Material 3 theme definitions
-└── service       # Background services (if any)
+└── service       # Services (Rest APIs)
 ```
 
 ## Setup

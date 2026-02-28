@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
@@ -71,34 +70,23 @@ dependencies {
     implementation(libs.kotlin.stdlib)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.compose.ui)
-    // Tooling support (Previews, etc.)
-    implementation(libs.androidx.compose.ui.tooling)
-    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation(libs.androidx.compose.foundation)
-    // Material Design
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material3.window.size)
-    // Integration with activities
-    implementation(libs.androidx.activity.compose)
+
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+    debugImplementation(libs.compose.ui.tooling)
+
     // Integration with ViewModels
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    // Hilt navigation
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.ktx)
     // Responsive UI
     implementation(libs.androidx.window)
     // Coil for compose
     implementation(libs.coil.compose)
 
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.navigation.ui.ktx)
+    implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit)
     implementation(libs.okhttp)
@@ -110,10 +98,10 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
 
     // Room
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
 
     // Unit tests
     testImplementation(libs.junit)
@@ -124,9 +112,10 @@ dependencies {
     testImplementation(libs.kotlin.test)
 
     // UI Tests
+    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestUtil(libs.androidx.test.orchestrator)
 
