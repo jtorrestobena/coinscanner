@@ -6,8 +6,8 @@ import com.bytecoders.coinscanner.R
 
 sealed class NavigationItem(
     val route: String,
-    @StringRes val title: Int,
-    @DrawableRes val icon: Int
+    @param:StringRes val title: Int,
+    @param:DrawableRes val icon: Int
 ) {
     object Home : NavigationItem("home", R.string.title_home, R.drawable.ic_home)
     object Dashboard :

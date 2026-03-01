@@ -3,16 +3,16 @@ package com.bytecoders.coinscanner.ui.currency
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -100,18 +99,18 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                        ) {
-                            ClickableText(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(8.dp),
-                                text = AnnotatedString(currency.displayTitle()),
-                                style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary),
-                                onClick = {
+                                .clickable {
                                     viewModel.changeCurrency(currency)
                                     coinsItems.refresh()
                                     navController.popBackStack()
                                 }
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                text = currency.displayTitle(),
+                                style = MaterialTheme.typography.titleMedium.copy(color = MaterialTheme.colorScheme.primary),
                             )
                         }
                     }
@@ -332,7 +331,7 @@ fun SearchTextField(
 }
 
 @ExperimentalAnimationApi
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchBar(
     query: TextFieldValue,
@@ -363,7 +362,7 @@ fun SearchBar(
                     onBack()
                 }
             ) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+                Icon(imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
             }
         }
 
