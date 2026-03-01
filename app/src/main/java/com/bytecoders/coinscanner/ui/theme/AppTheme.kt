@@ -4,10 +4,7 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightThemeColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -81,14 +78,6 @@ fun AppTheme(
         }
         isDarkTheme -> DarkThemeColors
         else -> LightThemeColors
-    }
-
-    val systemUiController = rememberSystemUiController()
-    // Set color as Bottom Navigation (Surface elevated at 3dp)
-    val color = colorScheme.surfaceColorAtElevation(3.dp)
-
-    SideEffect {
-        systemUiController.setSystemBarsColor(color = color)
     }
 
     MaterialTheme(

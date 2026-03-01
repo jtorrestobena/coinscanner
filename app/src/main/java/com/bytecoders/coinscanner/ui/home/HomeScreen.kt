@@ -14,12 +14,12 @@ import androidx.compose.material.Chip
 import androidx.compose.material.ChipDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
@@ -49,8 +50,6 @@ import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
 import com.bytecoders.coinscanner.ui.navigation.RouteCurrencySelection
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.bytecoders.coinscanner.ui.theme.priceChangeColor
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.Flow
 import java.util.*
 import kotlin.random.Random
@@ -84,7 +83,7 @@ private val coinContentPadding = PaddingValues(8.dp)
 private val coinArrangement = Arrangement.spacedBy(8.dp)
 
 const val COIN_LIST = "COIN_LIST"
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
@@ -96,9 +95,8 @@ fun CoinList(
 ) {
     val coinsItems: LazyPagingItems<MarketItem> = coins.collectAsLazyPagingItems()
 
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing)
-    SwipeRefresh(
-        state = swipeRefreshState,
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
         onRefresh = { coinsItems.refresh() }
     ) {
         LazyVerticalGrid(
@@ -107,7 +105,7 @@ fun CoinList(
             verticalArrangement = coinArrangement,
             horizontalArrangement = coinArrangement,
             state = rememberLazyGridState(),
-            modifier = Modifier.testTag(COIN_LIST)
+            modifier = Modifier.testTag(COIN_LIST).fillMaxSize()
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 LazyRow {
@@ -161,8 +159,6 @@ fun CoinList(
                                     LoadingShimmerEffect()
                                 }
                             }
-                        } else {
-                            swipeRefreshState.isRefreshing = true
                         }
                     }
                     loadState.append is LoadState.Loading -> {
@@ -174,7 +170,7 @@ fun CoinList(
                         // TODO show error message
                     }
                     loadState.refresh is LoadState.NotLoading -> {
-                        swipeRefreshState.isRefreshing = false
+                        // handled by isRefreshing
                     }
                 }
             }
