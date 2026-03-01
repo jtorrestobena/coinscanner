@@ -8,6 +8,7 @@ import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.currency.SEARCH_FIELD_TAG
 import com.bytecoders.coinscanner.ui.home.COIN_ITEM
 import com.bytecoders.coinscanner.ui.home.COIN_LIST
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -60,6 +61,7 @@ class MainScreenTest {
         composeTestRule.onNodeWithText(toOrder).assertIsDisplayed()
     }
 
+    @Ignore("Integration test requiring network connectivity and API access")
     @Test
     fun changeCurrency() {
         // Change currency
