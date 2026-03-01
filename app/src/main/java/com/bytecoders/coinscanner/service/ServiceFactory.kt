@@ -1,5 +1,7 @@
 package com.bytecoders.coinscanner.service
 
+import android.os.Build
+import com.bytecoders.coinscanner.BuildConfig
 import com.bytecoders.coinscanner.BuildConfig.RAPID_API_KEY
 import com.bytecoders.coinscanner.service.coingecko.CoinGeckoService
 import com.bytecoders.coinscanner.service.converter.EnumConverterFactory
@@ -22,13 +24,9 @@ object ServiceFactory {
         val host = "coingecko.p.rapidapi.com"
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://$host/")
-            .client(
-                getRapidApiOkHttpClient(
-                    host
-                )
-            )
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(getRapidApiOkHttpClient(host))
             .addConverterFactory(EnumConverterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         return retrofit.create(CoinGeckoService::class.java)
@@ -39,11 +37,7 @@ object ServiceFactory {
         val host = "currency-converter-by-api-ninjas.p.rapidapi.com"
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://$host/v1/")
-            .client(
-                getRapidApiOkHttpClient(
-                    host
-                )
-            )
+            .client(getRapidApiOkHttpClient(host))
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -51,16 +45,16 @@ object ServiceFactory {
     }
 
     private fun getRapidApiOkHttpClient(apiHost: String) = OkHttpClient.Builder()
-        .addInterceptor {
-            it.proceed(
-                it.request().newBuilder()
-                    .addHeader(
-                        "x-rapidapi-key",
-                        RAPID_API_KEY
-                    )
-                    .addHeader("x-rapidapi-host", apiHost)
-                    .build()
-            )
+        .addInterceptor { chain ->
+            val userAgent = "${BuildConfig.APP_NAME}/${BuildConfig.VERSION_NAME} " +
+                    "(Android ${Build.VERSION.RELEASE}; ${Build.MANUFACTURER} ${Build.MODEL}; API ${Build.VERSION.SDK_INT})"
+            val request = chain.request().newBuilder()
+                .header("x-rapidapi-key", RAPID_API_KEY)
+                .header("x-rapidapi-host", apiHost)
+                .header("User-Agent", userAgent)
+                .header("Accept", "application/json")
+                .build()
+            chain.proceed(request)
         }
         .addInterceptor(
             HttpLoggingInterceptor().apply {

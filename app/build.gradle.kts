@@ -25,6 +25,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "RAPID_API_KEY", "\"${System.getenv("RAPID_API_KEY")}\"")
+        buildConfigField("String", "APP_NAME", "\"CoinScanner\"")
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
