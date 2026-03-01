@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -85,7 +86,10 @@ dependencies {
     // Coil for compose
     implementation(libs.coil.compose)
 
-    implementation(libs.navigation.ui.ktx)
+    implementation(libs.navigation3.ui)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.lifecycle.viewmodel.navigation3)
+
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit)

@@ -2,20 +2,24 @@ package com.bytecoders.coinscanner.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.navigation3.runtime.NavKey
 import com.bytecoders.coinscanner.R
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class NavigationItem(
-    val route: String,
     @param:StringRes val title: Int,
     @param:DrawableRes val icon: Int
-) {
-    object Home : NavigationItem("home", R.string.title_home, R.drawable.ic_home)
-    object Dashboard :
-        NavigationItem("portfolio", R.string.title_portfolio, R.drawable.ic_portfolio)
+) : NavKey {
+    @Serializable
+    data object Home : NavigationItem(R.string.title_home, R.drawable.ic_home)
 
-    object Notifications : NavigationItem(
-        "more",
-        R.string.title_more,
-        R.drawable.ic_more
-    )
+    @Serializable
+    data object Dashboard : NavigationItem(R.string.title_portfolio, R.drawable.ic_portfolio)
+
+    @Serializable
+    data object Notifications : NavigationItem(R.string.title_more, R.drawable.ic_more)
+
+    @Serializable
+    data object CurrencySelection : NavigationItem(R.string.title_home, R.drawable.ic_home)
 }

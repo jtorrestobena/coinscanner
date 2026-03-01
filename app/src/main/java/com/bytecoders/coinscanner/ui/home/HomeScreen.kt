@@ -1,6 +1,5 @@
 package com.bytecoders.coinscanner.ui.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -10,9 +9,6 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.material.Chip
-import androidx.compose.material.ChipDefaults
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.*
@@ -32,7 +28,6 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -47,7 +42,8 @@ import com.bytecoders.coinscanner.ellipsis
 import com.bytecoders.coinscanner.service.coingecko.GeckoOrder
 import com.bytecoders.coinscanner.ui.extensions.asCurrency
 import com.bytecoders.coinscanner.ui.extensions.asPercentageChange
-import com.bytecoders.coinscanner.ui.navigation.RouteCurrencySelection
+import com.bytecoders.coinscanner.ui.navigation.NavigationItem
+import com.bytecoders.coinscanner.ui.navigation.Navigator
 import com.bytecoders.coinscanner.ui.placeholder.LoadingShimmerEffect
 import com.bytecoders.coinscanner.ui.theme.priceChangeColor
 import kotlinx.coroutines.flow.Flow
@@ -55,7 +51,7 @@ import java.util.*
 import kotlin.random.Random
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
+fun HomeScreen(viewModel: HomeViewModel, navigator: Navigator) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val uiStateFlowLifecycleAware = remember(viewModel.uiState, lifecycleOwner) {
         viewModel.uiState.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
@@ -70,9 +66,7 @@ fun HomeScreen(viewModel: HomeViewModel, navController: NavHostController) {
             onSortChanged = { viewModel.changeOrder(it) },
             selectedOrder = uiState.value.marketOrdering,
             onCurrencyClicked = {
-                navController.navigate(RouteCurrencySelection) {
-                    launchSingleTop = true
-                }
+                navigator.navigate(NavigationItem.CurrencySelection)
             }
         )
     }
@@ -83,7 +77,7 @@ private val coinContentPadding = PaddingValues(8.dp)
 private val coinArrangement = Arrangement.spacedBy(8.dp)
 
 const val COIN_LIST = "COIN_LIST"
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun CoinList(
     coins: Flow<PagingData<MarketItem>>,
@@ -116,16 +110,19 @@ fun CoinList(
                         })
                     }
                     item {
-                        Chip(
-                            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+                        AssistChip(
                             onClick = onCurrencyClicked,
-                            border = BorderStroke(
-                                ChipDefaults.OutlinedBorderSize,
-                                MaterialTheme.colorScheme.primary
+                            label = { Text(currency.displayName) },
+                            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+                            border = AssistChipDefaults.assistChipBorder(
+                                enabled = true,
+                                borderColor = MaterialTheme.colorScheme.primary,
+                                borderWidth = 1.dp
                             ),
-                            colors = ChipDefaults.chipColors(
-                                backgroundColor = Color.Transparent,
-                                contentColor = MaterialTheme.colorScheme.primary
+                            colors = AssistChipDefaults.assistChipColors(
+                                containerColor = Color.Transparent,
+                                labelColor = MaterialTheme.colorScheme.primary,
+                                leadingIconContentColor = MaterialTheme.colorScheme.primary
                             ),
                             leadingIcon = {
                                 Icon(
@@ -133,9 +130,7 @@ fun CoinList(
                                     contentDescription = stringResource(id = selectedOrder.description)
                                 )
                             }
-                        ) {
-                            Text(currency.displayName)
-                        }
+                        )
                     }
                 }
             }
@@ -283,20 +278,6 @@ fun CoinItem(coin: MarketItem, currency: String, modifier: Modifier) {
 @Preview(name = "NEXUS_10", device = Devices.NEXUS_10)
 @Composable
 fun CoinListPreview() {
-    /*
-    This is not working as of now, see ticket:
-    https://issuetracker.google.com/issues/194544557?pli=1
-    CoinList(
-        coins = flowOf(
-            PagingData.from(
-                mutableListOf<MarketItem>().apply {
-                    repeat(50) {
-                        add(MarketItem(name = "Top Coin $it"))
-                    }
-                }
-            )
-        )
-    )*/
     LazyVerticalGrid(
         columns = coinColumns,
         contentPadding = coinContentPadding,
@@ -320,7 +301,6 @@ fun CoinListPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
@@ -330,16 +310,19 @@ fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
             .padding(start = 16.dp, end = 16.dp)
             .fillMaxWidth()
     ) {
-        Chip(
-            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+        AssistChip(
             onClick = { expanded = true },
-            border = BorderStroke(
-                ChipDefaults.OutlinedBorderSize,
-                MaterialTheme.colorScheme.primary
+            label = { Text(stringResource(id = selectedOrder.description)) },
+            shape = MaterialTheme.shapes.small.copy(CornerSize(8.dp)),
+            border = AssistChipDefaults.assistChipBorder(
+                enabled = true,
+                borderColor = MaterialTheme.colorScheme.primary,
+                borderWidth = 1.dp
             ),
-            colors = ChipDefaults.chipColors(
-                backgroundColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.primary
+            colors = AssistChipDefaults.assistChipColors(
+                containerColor = Color.Transparent,
+                labelColor = MaterialTheme.colorScheme.primary,
+                leadingIconContentColor = MaterialTheme.colorScheme.primary
             ),
             leadingIcon = {
                 Icon(
@@ -347,15 +330,13 @@ fun SortMenu(selectedOrder: GeckoOrder, onSortChanged: (GeckoOrder) -> Unit) {
                     contentDescription = stringResource(id = selectedOrder.description)
                 )
             }
-        ) {
-            Text(stringResource(id = selectedOrder.description))
-        }
+        )
 
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            GeckoOrder.values().forEach { geckoOrder ->
+            GeckoOrder.entries.forEach { geckoOrder ->
                 DropdownMenuItem(
                     text = { Text(stringResource(id = geckoOrder.description)) },
                     onClick = {

@@ -1,14 +1,19 @@
+package com.bytecoders.coinscanner.ui.main
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.bytecoders.coinscanner.ui.navigation.BottomNavigationView
 import com.bytecoders.coinscanner.ui.navigation.NavigationGraph
+import com.bytecoders.coinscanner.ui.navigation.NavigationItem
+import com.bytecoders.coinscanner.ui.navigation.Navigator
 import com.bytecoders.coinscanner.ui.navigation.SideNavigationRailView
+import com.bytecoders.coinscanner.ui.navigation.rememberNavigationState
 import com.bytecoders.coinscanner.ui.theme.AppTheme
 
 @Preview(name = "NEXUS_7_2013", device = Devices.NEXUS_7_2013)
@@ -40,21 +45,42 @@ fun MainScreenPixel4xl() {
 fun MainScreen(widthSizeClass: WindowWidthSizeClass) {
     val isExpandedScreen = widthSizeClass == WindowWidthSizeClass.Expanded
     AppTheme {
-        val navController = rememberNavController()
+        val navigationState = rememberNavigationState(
+            startRoute = NavigationItem.Home,
+            topLevelRoutes = setOf(
+                NavigationItem.Home,
+                NavigationItem.Dashboard,
+                NavigationItem.Notifications
+            )
+        )
+        val navigator = remember { Navigator(navigationState) }
+
         Scaffold(
-            bottomBar = { if (!isExpandedScreen) BottomNavigationView(navController = navController) }
+            bottomBar = {
+                if (!isExpandedScreen) {
+                    BottomNavigationView(
+                        navigationState = navigationState,
+                        navigator = navigator
+                    )
+                }
+            }
         ) { paddingValues ->
             if (isExpandedScreen) {
                 Row {
-                    SideNavigationRailView(navController)
+                    SideNavigationRailView(
+                        navigationState = navigationState,
+                        navigator = navigator
+                    )
                     NavigationGraph(
-                        navController = navController,
+                        navigationState = navigationState,
+                        navigator = navigator,
                         bottomPadding = paddingValues.calculateBottomPadding()
                     )
                 }
             } else {
                 NavigationGraph(
-                    navController = navController,
+                    navigationState = navigationState,
+                    navigator = navigator,
                     bottomPadding = paddingValues.calculateBottomPadding()
                 )
             }

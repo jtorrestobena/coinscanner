@@ -9,8 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
@@ -33,7 +31,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.bytecoders.coinscanner.R
@@ -41,11 +38,12 @@ import com.bytecoders.coinscanner.currency.CurrencyManager
 import com.bytecoders.coinscanner.currency.displayTitle
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
 import com.bytecoders.coinscanner.ui.home.HomeViewModel
+import com.bytecoders.coinscanner.ui.navigation.Navigator
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
-fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostController) {
+fun CurrencySelectionScreen(viewModel: HomeViewModel, navigator: Navigator) {
     val state: SearchState = rememberSearchState()
 
     val coinsItems: LazyPagingItems<MarketItem> = viewModel.markets.collectAsLazyPagingItems()
@@ -55,7 +53,7 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
             state.focused = false
             state.query = state.query.copy(text = "")
         } else {
-            navController.popBackStack()
+            navigator.goBack()
         }
     }
 
@@ -102,7 +100,7 @@ fun CurrencySelectionScreen(viewModel: HomeViewModel, navController: NavHostCont
                                 .clickable {
                                     viewModel.changeCurrency(currency)
                                     coinsItems.refresh()
-                                    navController.popBackStack()
+                                    navigator.goBack()
                                 }
                         ) {
                             Text(
@@ -262,67 +260,64 @@ fun SearchTextField(
         contentColor = contentColorFor(surfaceColor),
         shape = RoundedCornerShape(percent = 50),
     ) {
+        Box(
+            contentAlignment = Alignment.CenterStart,
+            modifier = modifier
+        ) {
 
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = modifier
-            ) {
+            if (query.text.isEmpty()) {
+                SearchHint(
+                    modifier.padding(start = 24.dp, end = 8.dp),
+                    textColor = contentColorFor(surfaceColor)
+                )
+            }
 
-                if (query.text.isEmpty()) {
-                    SearchHint(
-                        modifier.padding(start = 24.dp, end = 8.dp),
-                        textColor = contentColorFor(surfaceColor)
-                    )
-                }
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    BasicTextField(
-                        value = query,
-                        onValueChange = onQueryChange,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .onFocusChanged {
-                                onSearchFocusChange(it.isFocused)
-                            }
-                            .focusRequester(focusRequester)
-                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp)
-                            .testTag(SEARCH_FIELD_TAG),
-                        singleLine = true,
-                        textStyle = TextStyle(contentColorFor(backgroundColor = surfaceColor)),
-                        cursorBrush = SolidColor(contentColorFor(backgroundColor = surfaceColor))
-                    )
-
-                    when {
-                        searching -> {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(horizontal = 6.dp)
-                                    .size(36.dp)
-                            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                BasicTextField(
+                    value = query,
+                    onValueChange = onQueryChange,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .onFocusChanged {
+                            onSearchFocusChange(it.isFocused)
                         }
-                        query.text.isNotEmpty() -> {
-                            IconButton(onClick = onClearQuery) {
-                                Icon(
-                                    imageVector = Icons.Filled.Close,
-                                    contentDescription = null,
-                                    tint = contentColorFor(
-                                        backgroundColor = surfaceColor
-                                    )
-                                )
-                            }
-                        }
-                        else -> {
+                        .focusRequester(focusRequester)
+                        .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp)
+                        .testTag(SEARCH_FIELD_TAG),
+                    singleLine = true,
+                    textStyle = TextStyle(contentColorFor(backgroundColor = surfaceColor)),
+                    cursorBrush = SolidColor(contentColorFor(backgroundColor = surfaceColor))
+                )
+
+                when {
+                    searching -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(horizontal = 6.dp)
+                                .size(36.dp)
+                        )
+                    }
+                    query.text.isNotEmpty() -> {
+                        IconButton(onClick = onClearQuery) {
                             Icon(
-                                imageVector = Icons.Filled.Search,
+                                imageVector = Icons.Filled.Close,
                                 contentDescription = null,
                                 tint = contentColorFor(
                                     backgroundColor = surfaceColor
-                                ),
-                                modifier = Modifier.padding(end = 16.dp)
+                                )
                             )
                         }
+                    }
+                    else -> {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            tint = contentColorFor(
+                                backgroundColor = surfaceColor
+                            ),
+                            modifier = Modifier.padding(end = 16.dp)
+                        )
                     }
                 }
             }
