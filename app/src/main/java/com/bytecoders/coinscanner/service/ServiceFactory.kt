@@ -47,7 +47,7 @@ object ServiceFactory {
     private fun getRapidApiOkHttpClient(apiHost: String) = OkHttpClient.Builder()
         .addInterceptor { chain ->
             val userAgent = "${BuildConfig.APP_NAME}/${BuildConfig.VERSION_NAME} " +
-                    "(Android ${Build.VERSION.RELEASE}; ${Build.MANUFACTURER} ${Build.MODEL}; API ${Build.VERSION.SDK_INT})"
+                "(Android ${Build.VERSION.RELEASE}; ${Build.MANUFACTURER} ${Build.MODEL}; API ${Build.VERSION.SDK_INT})"
             val request = chain.request().newBuilder()
                 .header("x-rapidapi-key", RAPID_API_KEY)
                 .header("x-rapidapi-host", apiHost)

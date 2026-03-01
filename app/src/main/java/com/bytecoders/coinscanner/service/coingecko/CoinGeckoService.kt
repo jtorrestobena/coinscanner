@@ -33,6 +33,7 @@ enum class GeckoOrder(val description: Int) {
     VOLUME_DESC(R.string.market_volume_desc)
 }
 
+@Suppress("TooManyFunctions", "LongParameterList")
 interface CoinGeckoService {
     @GET("ping")
     suspend fun ping(): Map<String, String>
