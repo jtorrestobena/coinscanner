@@ -11,64 +11,6 @@ data class MarketChart(
     val totalVolumes: List<List<Double>>
 )
 
-data class StatusUpdateResponse(
-    @SerializedName("status_updates")
-    val statusUpdates: List<StatusUpdate>
-)
-
-data class StatusUpdate(
-    @SerializedName("description")
-    val description: String,
-    @SerializedName("category")
-    val category: String,
-    @SerializedName("created_at")
-    val createdAt: String,
-    @SerializedName("user")
-    val user: String,
-    @SerializedName("user_title")
-    val userTitle: String,
-    @SerializedName("pin")
-    val pin: Boolean
-)
-
-data class EventResponse(
-    @SerializedName("data")
-    val data: List<Event>,
-    @SerializedName("count")
-    val count: Int,
-    @SerializedName("page")
-    val page: Int
-)
-
-data class Event(
-    @SerializedName("type")
-    val type: String,
-    @SerializedName("title")
-    val title: String,
-    @SerializedName("description")
-    val description: String,
-    @SerializedName("organizer")
-    val organizer: String,
-    @SerializedName("start_date")
-    val startDate: String,
-    @SerializedName("end_date")
-    val endDate: String,
-    @SerializedName("website")
-    val website: String,
-    @SerializedName("email")
-    val email: String,
-    @SerializedName("venue")
-    val venue: String,
-    @SerializedName("address")
-    val address: String,
-    @SerializedName("city")
-    val city: String,
-    @SerializedName("country")
-    val country: String,
-    @SerializedName("screenshot")
-    val screenshot: String
-)
-
 data class ExchangeRateResponse(
     @SerializedName("rates")
     val rates: Map<String, ExchangeRate>
@@ -248,20 +190,6 @@ data class MarketData(
     val totalSupply: Double?,
     @SerializedName("max_supply")
     val maxSupply: Double?
-)
-
-data class EventCountry(
-    @SerializedName("country")
-    val country: String,
-    @SerializedName("code")
-    val code: String
-)
-
-data class EventTypeResponse(
-    @SerializedName("data")
-    val data: List<String>,
-    @SerializedName("count")
-    val count: Int
 )
 
 data class CoinHistory(

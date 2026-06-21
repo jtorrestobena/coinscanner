@@ -4,13 +4,11 @@ import com.bytecoders.coinscanner.R
 import com.bytecoders.coinscanner.data.coingecko.CoinFullData
 import com.bytecoders.coinscanner.data.coingecko.CoinHistory
 import com.bytecoders.coinscanner.data.coingecko.CoinListing
-import com.bytecoders.coinscanner.data.coingecko.EventResponse
 import com.bytecoders.coinscanner.data.coingecko.Exchange
 import com.bytecoders.coinscanner.data.coingecko.ExchangeRateResponse
 import com.bytecoders.coinscanner.data.coingecko.GlobalDataResponse
 import com.bytecoders.coinscanner.data.coingecko.MarketChart
 import com.bytecoders.coinscanner.data.coingecko.MarketItem
-import com.bytecoders.coinscanner.data.coingecko.StatusUpdateResponse
 import com.bytecoders.coinscanner.data.coingecko.TickerResponse
 import com.google.gson.annotations.SerializedName
 import retrofit2.http.GET
@@ -45,7 +43,7 @@ interface CoinGeckoService {
         @Query("include_market_cap") includeMarketCap: Boolean = false,
         @Query("include_24hr_vol") include24hrVol: Boolean = false,
         @Query("include_24hr_change") include24hrChange: Boolean = false,
-        @Query("include_last_updated_at") includeLastUpdatedAt: Boolean = false
+        @Query("include_last_updated_at") includeLastUpdatedAt: Boolean = false,
     ): Map<String, Map<String, Double>>
 
     @GET("simple/token_price/{id}")
@@ -56,7 +54,7 @@ interface CoinGeckoService {
         @Query("include_market_cap") includeMarketCap: Boolean = false,
         @Query("include_24hr_vol") include24hrVol: Boolean = false,
         @Query("include_24hr_change") include24hrChange: Boolean = false,
-        @Query("include_last_updated_at") includeLastUpdatedAt: Boolean = false
+        @Query("include_last_updated_at") includeLastUpdatedAt: Boolean = false,
     ): Map<String, Map<String, Double>>
 
     @GET("simple/supported_vs_currencies")
@@ -116,16 +114,9 @@ interface CoinGeckoService {
         @Query("to") to: Long
     ): MarketChart
 
-    @GET("coins/{id}/status_updates")
-    suspend fun getCoinStatusUpdates(
-        @Path("id") id: String,
-        @Query("per_page") perPage: Int? = null,
-        @Query("page") page: Int? = null
-    ): StatusUpdateResponse
-
-    @GET("coins/{id}/contract/{contract_address}")
+    @GET("coins/{platform_id}/contract/{contract_address}")
     suspend fun getCoinContractInfo(
-        @Path("id") id: String,
+        @Path("platform_id") platformId: String,
         @Path("contract_address") contractAddress: String
     ): CoinFullData
 
@@ -152,37 +143,6 @@ interface CoinGeckoService {
         @Query("depth") depth: Boolean? = null,
         @Query("order") order: String? = null
     ): TickerResponse
-
-    @GET("exchanges/{id}/status_updates")
-    suspend fun getExchangeStatusUpdates(
-        @Path("id") id: String,
-        @Query("per_page") perPage: Int? = null,
-        @Query("page") page: Int? = null
-    ): StatusUpdateResponse
-
-    @GET("status_updates")
-    suspend fun getStatusUpdates(
-        @Query("category") category: String? = null,
-        @Query("project_type") projectType: String? = null,
-        @Query("per_page") perPage: Int? = null,
-        @Query("page") page: Int? = null
-    ): StatusUpdateResponse
-
-    @GET("events")
-    suspend fun getEvents(
-        @Query("country_code") countryCode: String? = null,
-        @Query("type") type: String? = null,
-        @Query("page") page: Int? = null,
-        @Query("upcoming_events_only") upcomingEventsOnly: Boolean? = null,
-        @Query("from_date") fromDate: String? = null,
-        @Query("to_date") toDate: String? = null
-    ): EventResponse
-
-    @GET("events/countries")
-    suspend fun getEventCountries(): Map<String, Any>
-
-    @GET("events/types")
-    suspend fun getEventTypes(): Map<String, Any>
 
     @GET("exchange_rates")
     suspend fun getExchangeRates(): ExchangeRateResponse
